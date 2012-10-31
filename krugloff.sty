@@ -30,6 +30,9 @@
 % Без этого почему-то не получаются длинные тире.
 \newfontfamily\russianfont[Scale=MatchLowercase,Mapping=tex-text]{Liberation Serif}
 
+\RequirePackage{fancyvrb}
+\VerbatimFootnotes
+
 \RequirePackage[xetex,
   frenchlinks,
   colorlinks,
@@ -67,15 +70,9 @@
 \newcommand{\firstkey}[1]{ \begin{minipage}[b]{0.97\textwidth} \textbf{#1} }
 \newcommand{\key}[1]{\end{minipage} \\[1em] \firstkey{#1}}
 
-% Для кода в котором listings не работает (проблемы с кириллицей).
-\newenvironment{code}
-  {\par \medskip \vrule \begin{minipage}[h]{0.9\textwidth} \begin{alltt}}
-  {\end{alltt} \end{minipage} \bigskip \par}
-
-% Для подсветки в редакторе.
-\renewenvironment{verbatim}
-  {\begin{code}}
-  {\end{code}}
+\RecustomVerbatimEnvironment
+  {verbatim}{Verbatim}
+  {gobble=2, frame=leftline, samepage=true}
 
 \newenvironment{operator}
   {\begin{description}}
