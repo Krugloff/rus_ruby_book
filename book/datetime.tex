@@ -40,7 +40,7 @@
   Создание объекта. При вызове без аргументов возвращается текущее системное время. Последним аргументом передается смещение относительно UTC в виде текста "+00:00" или количества секунд. По умолчанию берется системное смещение часового пояса.
   \begin{verbatim}
   Time.new 1990, 3, 31, nil, nil, nil, "+04:00" 
-  # -> 1990-03-31 00:00:00 +0400\
+  # -> 1990-03-31 00:00:00 +0400
   \end{verbatim} 
    
   \declare{::now}{\# -> time} 
@@ -81,7 +81,7 @@
   [ self.sec, self.min, self.hour,
     self.day, self.month, self.year,
     self.wday, self.yday,
-    self.isdst, self.zone ]\
+    self.isdst, self.zone ]
   \end{verbatim}   
   \verb!Time.local( 1990, 3, 31 ).to_a # -> [ 0, 0, 0, 31, 3, 1990, 6, 90, true, "MSD" ]!
  

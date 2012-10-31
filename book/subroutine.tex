@@ -26,7 +26,7 @@
     Proc.new
   end
   proc = proc_from \{ "hello" \}
-  proc.call # -> "hello"\
+  proc.call # -> "hello"
   \end{verbatim}
 
   \declare{proc \{ |*params| \}}{\# -> proc}
@@ -104,7 +104,7 @@
   b.curry[1][2][3] # -> 6 
   b.curry[1, 2][3, 4] # -> argument_error 
   b.curry(5) # -> argument_error 
-  b.curry(1) # -> argument_error\
+  b.curry(1) # -> argument_error
   \end{verbatim}
 \end{methodlist}
 
@@ -121,7 +121,7 @@
   proc \{ | a, b, c | \}.arity # -> 3 
   proc \{ |*a| \}.arity # -> -1 
   proc \{ | a, *b | \}.arity # -> -2 
-  proc \{ | a, *b, c | \}.arity # -> -3\
+  proc \{ | a, *b, c | \}.arity # -> -3
   \end{verbatim} 
  
   \declare{.parameters}{\# -> array} 
@@ -129,7 +129,7 @@
   \begin{verbatim}
   proc = lambda \{ | x, y = 42, *other | \} 
   proc.parameters
-  # -> [ [:req, :x],  [:opt, :y], [:rest, :other] ]\
+  # -> [ [:req, :x],  [:opt, :y], [:rest, :other] ]
   \end{verbatim}
 
   \declare{.binding}{\# -> binding} 
@@ -266,7 +266,7 @@
   Добавление информации об объекте, для которого метод вызывается. Если такая информация уже существовала, то объекты должны принадлежать к одному классу.
   \begin{verbatim}
   12.method(?+).unbind.bind 1 # -> #<Method: Fixnum#+>
-  12.method(?+).unbind.bind 1.0 # -> error\
+  12.method(?+).unbind.bind 1.0 # -> error
   \end{verbatim}  
 \end{methodlist}
 

@@ -60,7 +60,7 @@ nil.to_s -> "" & false.to_s -> "false" & true.to_s -> "true" \\ \hline
   Преобразует в замыкание, соответствующую методу с используемым идентификатором.
   \begin{verbatim}
   1.next # -> 2
-  :next.to_proc.call(1) # -> 2\
+  :next.to_proc.call(1) # -> 2
   \end{verbatim}  
 \end{methodlist}
 
@@ -133,7 +133,7 @@ nil.to_s -> "" & false.to_s -> "false" & true.to_s -> "true" \\ \hline
   Struct.new "Kлюч", :объект # -> Struct::Kлюч 
   # только для примера. Никогда так больше не делайте :) 
   Struct::Kлюч.new [ 1, 2, 3 ] 
-  # ->  #<struct Struct::Kлюч объект=[1, 2, 3]> \
+  # ->  #<struct Struct::Kлюч объект=[1, 2, 3]> 
   \end{verbatim}
 \end{methodlist}
   
@@ -145,7 +145,7 @@ nil.to_s -> "" & false.to_s -> "false" & true.to_s -> "true" \\ \hline
   Возвращает информацию о структуре.
   \begin{verbatim}
   Struct::Kлюч.new( [ 1, 2, 3 ] ).to_s 
-  # -> "#<struct Struct::Kлюч объект=[1, 2, 3]>"\
+  # -> "#<struct Struct::Kлюч объект=[1, 2, 3]>"
   \end{verbatim} 
 
   \declare{.to_a}{\# -> array} 
@@ -166,7 +166,7 @@ nil.to_s -> "" & false.to_s -> "false" & true.to_s -> "true" \\ \hline
   \begin{verbatim}
   Struct::Kлюч.new( [ 1, 2, 3 ] )[ "объект" ] # -> [ 1, 2, 3 ]
   Struct::Kлюч.new( [ 1, 2, 3 ] )[ 0 ] # -> [ 1, 2, 3 ] 
-  Struct::Kлюч.new( [ 1, 2, 3 ] )[ -1 ] # -> [ 1, 2, 3 ]\
+  Struct::Kлюч.new( [ 1, 2, 3 ] )[ -1 ] # -> [ 1, 2, 3 ]
   \end{verbatim}
 
   \declare{struct[attr]=(object)}{\# -> object}
@@ -174,14 +174,14 @@ nil.to_s -> "" & false.to_s -> "false" & true.to_s -> "true" \\ \hline
   \begin{verbatim}
   Struct::Kлюч.new( [ 1, 2, 3 ] )[ "объект" ] = :array # -> :array
   Struct::Kлюч.new( [ 1, 2, 3 ] )[ 0 ] = :array # -> :array 
-  Struct::Kлюч.new( [ 1, 2, 3 ] )[ -1 ] = :array # -> :array\
+  Struct::Kлюч.new( [ 1, 2, 3 ] )[ -1 ] = :array # -> :array
   \end{verbatim} 
  
   \declare{struct.values_at(*integer)}{\# -> array}
   Возвращает массив значений свойств с переданными индексами. При вызове без аргументов возвращается пустой массив.
   \begin{verbatim}
   Struct::Kлюч.new( [ 1, 2, 3 ] ).values_at 0, -1 
-  # -> [ [ 1, 2, 3 ], [ 1, 2, 3 ] ]\
+  # -> [ [ 1, 2, 3 ], [ 1, 2, 3 ] ]
   \end{verbatim} 
 \end{methodlist}
 

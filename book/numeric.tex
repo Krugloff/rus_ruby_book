@@ -45,7 +45,7 @@ $$
   1.coerce 2.1 # -> [ 2.1, 1.0 ]
   1.coerce "2.1" # -> [ 2.1, 1.0 ]
   1.coerce "0xAF" # -> [ 175.0, 1.0 ]
-  1.coerce "q123" # -> error!\
+  1.coerce "q123" # -> error!
   \end{verbatim}
 
   \declare{.i}{\# -> complex}
@@ -96,7 +96,7 @@ $$
   Округляет число с заданной точностью. Точность определяет разряд, до которого будет выполнено округление.
   \begin{verbatim}
   2.11355.round 4 # -> 2.1136
-  2.round 4 # -> 2.0\
+  2.round 4 # -> 2.0
   \end{verbatim} 
 
   \declare{.truncate}{\# -> integer}
@@ -151,7 +151,7 @@ $$
   Для действительных чисел возвращает ноль, если число не отрицательно. В другом случае возвращается ссылка на константу \constant{Math::PI}.
   \begin{verbatim}
   1.arg # -> 0
-  -1.arg # -> 3.141592653589793\
+  -1.arg # -> 3.141592653589793
   \end{verbatim}
 
   \declare{.polar}{\# -> array}
@@ -184,7 +184,7 @@ $$
   Проверяет относится ли число к целым.
   \begin{verbatim}
   1.integer? # -> true
-  2.1.integer? # -> false\
+  2.1.integer? # -> false
   \end{verbatim}
 
   \declare{.real?}{}
@@ -195,14 +195,14 @@ $$
   Возвращает число, если оно не равно нулю. В другом случае возвращается nil.
   \begin{verbatim}
   1.nonzero? # -> 1
-  0.0.nonzero? # -> nil\
+  0.0.nonzero? # -> nil
   \end{verbatim}
 
   \declare{.zero?}{}
   Проверяет равно ли число нулю.
   \begin{verbatim}
   1.zero? # -> false
-  0.0.zero? # -> true\
+  0.0.zero? # -> true
   \end{verbatim}
 \end{methodlist}
 
@@ -246,7 +246,7 @@ $$
   \begin{verbatim}
   16.to_s 16 # -> "10"
   0xF.to_s 16 # -> "f" 
-  0x16.to_s 16 # -> "16" \
+  0x16.to_s 16 # -> "16" 
   \end{verbatim}
 \end{methodlist}
 
@@ -325,7 +325,7 @@ $$
   \begin{verbatim}
   0.even? # -> true
   1.even? # -> false
-  2.even? # -> true\
+  2.even? # -> true
   \end{verbatim}
 
   \declare{.odd?}{}
@@ -333,7 +333,7 @@ $$
   \begin{verbatim}
   0.odd? # -> false
   1.odd? # -> true
-  2.odd? # -> false\
+  2.odd? # -> false
   \end{verbatim}
 \end{methodlist}
 
@@ -477,7 +477,7 @@ $$
   Rational 2, 3 # -> (2/3) 
   Rational "2/3" # -> (2/3) 
   Rational 8, 3 # -> (8/3) 
-  Rational 2.1, 3 # -> (4728779608739021/6755399441055744)\
+  Rational 2.1, 3 # -> (4728779608739021/6755399441055744)
   \end{verbatim}
 \end{methodlist}
 
@@ -549,7 +549,7 @@ $$
   Complex "2/3" # -> ((2/3)+0i) 
   Complex 8, 3 # -> (8+3i) 
   Complex 2.1, 3 # -> (2.1+3i) 
-  Complex ?i # -> (0+1i)\
+  Complex ?i # -> (0+1i)
   \end{verbatim}
 
   \declare{::polar( magnitude, angle = 0.0 )}{\# -> complex} 

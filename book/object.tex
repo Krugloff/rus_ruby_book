@@ -64,7 +64,7 @@
   \begin{verbatim}
   Fixnum === 1 # -> true 
   Integer === 1 # -> true 
-  Comparable === 1 # -> true\
+  Comparable === 1 # -> true
   \end{verbatim}
   Этот метод обычно используется в альтернативном синтаксисе предложения case, позволяя проверять сразу несколько объектов.
 
@@ -74,7 +74,7 @@
   \begin{verbatim}
   1.is_a? Fixnum # -> true 
   1.is_a? Integer # -> true 
-  1.is_a? Comparable # -> true\
+  1.is_a? Comparable # -> true
   \end{verbatim}  
 
   \declare{object.instance_of?(module)}{}
@@ -82,7 +82,7 @@
   \begin{verbatim}
   1.instance_of? Fixnum # -> true 
   1.instance_of? Integer # -> false
-  1.instance_of? Comparable # -> false\
+  1.instance_of? Comparable # -> false
   \end{verbatim}
 
   \declare{object.respond_to?( method, include_private = false )}{}
@@ -111,7 +111,7 @@
   \begin{verbatim}
   Fixnum.ancestors 
   # -> [Fixnum, Integer, Numeric, Comparable,
-    Object, Kernel, BasicObject]\
+    Object, Kernel, BasicObject]
   \end{verbatim}
  
   \declare{module.included_modules}{\# -> array} 
@@ -138,7 +138,7 @@
   \begin{verbatim}
   Integer < Numeric # -> true
   Numeric < Comparable # -> true
-  Integer < Comparable # -> true\
+  Integer < Comparable # -> true
   \end{verbatim}
 
   \declare{module > module}{} 
@@ -146,7 +146,7 @@
   \begin{verbatim}
   Integer > Numeric # -> false
   Numeric > Comparable # -> false
-  Integer > Comparable # -> false\
+  Integer > Comparable # -> false
   \end{verbatim}
 
   \declare{module <= module}{} 
@@ -154,7 +154,7 @@
   \begin{verbatim}
   Integer <= Integer # -> true 
   Numeric <= Comparable # -> true
-  Integer <= Comparable # -> true\
+  Integer <= Comparable # -> true
   \end{verbatim}
 
   \declare{module >= module}{} 
@@ -162,7 +162,7 @@
   \begin{verbatim}
   Integer >= Integer # -> true 
   Numeric => Comparable # -> false
-  Integer => Comparable # -> false\
+  Integer => Comparable # -> false
   \end{verbatim}
 \end{methodlist}
 
@@ -519,7 +519,7 @@
   1.equal? 1.0 -> false 
   "1".equal? "1" -> false 
   1.equal? 1 -> true 
-  :a.equal? :a -> true\
+  :a.equal? :a -> true
   \end{verbatim}
 \end{methodlist}
 

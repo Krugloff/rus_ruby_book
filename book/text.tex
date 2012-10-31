@@ -27,7 +27,7 @@
   Преобразует текст в объект-идентификатор.
   \begin{verbatim}
   "abc".to_sym # -> :abc
-  "123a".to_sym # -> :"123a"\
+  "123a".to_sym # -> :"123a"
   \end{verbatim}  
 
   \declare{.to_i( numeral_system = 10 )}{\# -> integer}
@@ -159,7 +159,7 @@
   Возвращает символ с указанным индексом. Если индекс выходит за пределы текста, то возвращается nil.
   \begin{verbatim}
   "abc"[2] # -> "c"
-  "abc"[4] # -> nil\
+  "abc"[4] # -> nil
   \end{verbatim}
 
   \declare{string[ start, length ]}{\# -> string2}
@@ -175,7 +175,7 @@
   "abc"[ 2, 2 ] # -> "c"
   "abc"[ 2, 0 ] # -> ""
   "abc"[ 2, -1 ] # -> nil
-  "abc"[ 3, 1 ] # -> ""\
+  "abc"[ 3, 1 ] # -> ""
   \end{verbatim}
 
   \declare{string[range]}{\# -> string2}
@@ -192,21 +192,21 @@
   "abc"[ 1...3 ] # -> "bc"
   "abc"[ 1...5 ] # -> "bc"
   "abc"[ 1...0 ] # -> ""
-  "abc"[ 5...9 ] # -> nil\
+  "abc"[ 5...9 ] # -> nil
   \end{verbatim}
 
   \declare{string[template]}{\# -> string2}
   Возвращает часть текста, совпадающую с образцом. Если совпадений не найдено, то возвращается nil.
   \begin{verbatim}
   "abc"[ /[b-z]+/ ] # -> "bc"
-  "abc"[ /b-z+/ ] # -> nil\
+  "abc"[ /b-z+/ ] # -> nil
   \end{verbatim}
 
   \declare{string[ reg, group ]}{\# -> string2}
   Возвращает часть текста, совпадающую с группой в теле регулярного выражения (передается идентификатор группы). Если совпадений не найдено, то возвращается nil.
   \begin{verbatim}
   "abc"[ /(b)c/, 1 ] # -> "b"
-  "abc"[ /(b)c/, 3 ] # -> nil\
+  "abc"[ /(b)c/, 3 ] # -> nil
   \end{verbatim}
 \end{methodlist}
 
@@ -219,7 +219,7 @@
   Изменяет символ с указанным индексом. Если индекс выходит за пределы текста, то вызывается ошибка.
   \begin{verbatim}
   "abc"[2] = "d" # -> "d"
-  "abc"[4] = "d"  # -> error!\
+  "abc"[4] = "d"  # -> error!
   \end{verbatim}
 
   \declare{string[ start, length ] = string2}{\# -> string2}
@@ -240,7 +240,7 @@
   string # -> "abd"
   "abc"[ 2, 0 ] = "d" # -> "d"
   string # -> "abdc"
-  "abc"[ 2, -1 ] = "d" # -> error!\
+  "abc"[ 2, -1 ] = "d" # -> error!
   \end{verbatim}
 
   \declare{string[range] = string2}{\# -> string2}
@@ -257,7 +257,7 @@
   string # -> "ad"
   "abc"[ 1...0 ] = "d" # -> "d"
   string # -> "adbc"
-  "abc"[ 5...9 ] = "d" # -> error!\
+  "abc"[ 5...9 ] = "d" # -> error!
   \end{verbatim}
 
   \declare{string[template] = string2}{\# -> string2}
@@ -265,7 +265,7 @@
   \begin{verbatim}
   "abc"[ /[b-z]+/ ] = "d" # -> "d"
   string # -> "ad"
-  "abc"[ /b-z+/ ] = "d" # -> error!\
+  "abc"[ /b-z+/ ] = "d" # -> error!
   \end{verbatim}
 
   \declare{string[ reg, group ]}{\# -> string2}
@@ -273,7 +273,7 @@
   \begin{verbatim}
   "abc"[ /(b)c/, 1 ] = "d" # -> "d"
   a # -> "adc"
-  "abc"[ /(b)c/, 3 ] = "d" # -> error!\
+  "abc"[ /(b)c/, 3 ] = "d" # -> error!
   \end{verbatim}
 \end{methodlist}
 
@@ -302,7 +302,7 @@
   Изменяет байт с переданным индексом. Если индекс байта выходит за пределы текста, то вызывается ошибка.
   \begin{verbatim}
   "abc".setbyte 0, 120 # -> 120
-  string # -> "xbc"\
+  string # -> "xbc"
   \end{verbatim}
 \end{methodlist}
 
@@ -376,7 +376,7 @@
   Аналогично выполнению \verb!self[*object] = ""!. В результате возвращается удаленная часть текста.
   \begin{verbatim}
   "abc".slice! 2 # -> "c"
-  string # -> "ab"\
+  string # -> "ab"
   \end{verbatim}
 
   \declare{.chomp( last = \$/ )}{\# -> string}
@@ -422,7 +422,7 @@
   Аналогично выполнению \verb!self[index] = string!.
   \begin{verbatim}
   "abc".insert 2, ?d # -> "abdc"
-  string # -> "abdc"\
+  string # -> "abdc"
   \end{verbatim}
 
   \declare{.prepend(string)}{\# -> self}
@@ -449,14 +449,14 @@
   Экранирует все спецсимволы. Сам текст при этом экранируется двойными кавычками. Символы, не относящиеся к ASCII кодировке заменяются на их кодовые позиции.
   \begin{verbatim}
   "3\verb!\n!/2".dump # -> "\verb!\"!3\verb!\n!/2\verb!\"!"
-  "3\verb!\n!/2л".dump # -> "\verb!\"!3\verb!\n!/2\verb!\u{43b}!\verb!\"!"\
+  "3\verb!\n!/2л".dump # -> "\verb!\"!3\verb!\n!/2\verb!\u{43b}!\verb!\"!"
   \end{verbatim}
 
   \declare{.inspect}{\# -> string}
   Экранирует все спецсимволы. Сам текст при этом экранируется двойными кавычками.
   \begin{verbatim}
   "3\verb!\n!/2".inspect # -> "\verb!\"!3\verb!\n!/2\verb!\"!"
-  "3\verb!\n!/2л".inspect # -> "\verb!\"!3\verb!\n!/2л\verb!\"!"\
+  "3\verb!\n!/2л".inspect # -> "\verb!\"!3\verb!\n!/2л\verb!\"!"
   \end{verbatim}
 \end{methodlist}
 
@@ -541,7 +541,7 @@
   \begin{verbatim}
   "a  b  c".split # -> [ "a", "b", "c" ]
   "a  b  c".split // # -> [ "a", " ", " ", "b", " ", " ", "c" ]
-  "a  b  c".split //, 2 # -> [ "a", "  b  c" ]\
+  "a  b  c".split //, 2 # -> [ "a", "  b  c" ]
   \end{verbatim}
 \end{methodlist}
 
@@ -577,7 +577,7 @@
   \begin{verbatim}
   "abcab".gsub /(a)b/, '\1' # -> "aca"
   "abcab".gsub /(a)b/, 'ab' => ?y  # -> "ycy"
-  "abcab".gsub( /(a)b/ ) \{ |match| match.next \} # -> "accac"\
+  "abcab".gsub( /(a)b/ ) \{ |match| match.next \} # -> "accac"
   \end{verbatim}
 
   \declare{.gsub!( template, replace )}{\# -> self}
@@ -592,7 +592,7 @@
   \begin{verbatim}
   "abcab".sub /(a)b/, '\1'  # -> "acab"
   "abcab".sub /(a)b/, 'ab' => ?y # -> "ycab"
-  "abcab".sub( /(a)b/ ) \{ |match| match.next \} # -> "accab"\
+  "abcab".sub( /(a)b/ ) \{ |match| match.next \} # -> "accab"
   \end{verbatim}
 
   \declare{.sub!( template, replace )}{\# -> self}
@@ -979,7 +979,7 @@
   Возвращает массив всех доступных синонимов.
   \begin{verbatim}
   Encoding::UTF_8.names 
-  # -> ["UTF-8", "CP65001", "locale", "external", "filesystem"]\
+  # -> ["UTF-8", "CP65001", "locale", "external", "filesystem"]
   \end{verbatim}  
  
   \declare{.ascii_compatible?}{} 
@@ -1045,7 +1045,7 @@
   \begin{verbatim}
   Encoding::Converter.asciicompat_encoding "utf-8" # -> nil 
   Encoding::Converter.asciicompat_encoding "utf-16le" 
-  # -> #<Encoding:UTF-8>\
+  # -> #<Encoding:UTF-8>
   \end{verbatim}
 
   \declare{::search_convpath( source_enc, dest_enc, options = nil )}{\# -> array}
@@ -1055,7 +1055,7 @@
     universal_newline: true 
   # -> [ [ #<Encoding:ISO-8859-1>, #<Encoding:UTF-8> ],
   #   [ #<Encoding:UTF-8>, #<Encoding:EUC-JP> ],
-  #   "universal_newline" ]\
+  #   "universal_newline" ]
   \end{verbatim}
 \end{methodlist}
 
@@ -1066,7 +1066,7 @@
   Возвращает информацию об объекте.
   \begin{verbatim}
   Encoding::Converter.new( "ISO-8859-1", "EUC-JP" ).inspect 
-  # -> "#<Encoding::Converter: ISO-8859-1 to EUC-JP>"\
+  # -> "#<Encoding::Converter: ISO-8859-1 to EUC-JP>"
   \end{verbatim} 
  
   \declare{.convpath}{\# -> array} 
@@ -1074,7 +1074,7 @@
   \begin{verbatim}
   Encoding::Converter.new( "ISO-8859-1", "EUC-JP" ).convpath 
   # -> [ [ #<Encoding:ISO-8859-1>, #<Encoding:UTF-8> ],
-  #   [ #<Encoding:UTF-8>, #<Encoding:EUC-JP> ] ]\
+  #   [ #<Encoding:UTF-8>, #<Encoding:EUC-JP> ] ]
   \end{verbatim}
  
   \declare{.source_encoding}{\# -> encoding} 
@@ -1082,7 +1082,7 @@
   \begin{verbatim}
   Encoding::Converter.new("ISO-8859-1",
     "EUC-JP").source_encoding 
-  # -> #<Encoding:ISO-8859-1>\
+  # -> #<Encoding:ISO-8859-1>
   \end{verbatim}
  
   \declare{.destination_encoding}{\# -> encoding} 
@@ -1090,14 +1090,14 @@
   \begin{verbatim}
   Encoding::Converter.new("ISO-8859-1",
     "EUC-JP").destination_encoding 
-  # -> #<Encoding:EUC-JP>\
+  # -> #<Encoding:EUC-JP>
   \end{verbatim}
 
   \declare{.replacement}{\# -> string} 
   Возвращает текст для замены некорректных байтов или неопределенных символов. 
   \begin{verbatim}
   Encoding::Converter.new( "ISO-8859-1", "EUC-JP" ).replacement
-  # -> "?"\
+  # -> "?"
   \end{verbatim}
  
   \declare{.replacement= (string)}{\# -> string} 

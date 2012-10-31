@@ -17,7 +17,7 @@
   \begin{verbatim}
   Array.new 3, ?R # -> [ "R", "R", "R" ]
   Array.new [ 1, 2 ] # -> [ 1, 2 ]
-  Array.new(3) \{ |index| index**2 \} # -> [ 0, 1, 4 ]\
+  Array.new(3) \{ |index| index**2 \} # -> [ 0, 1, 4 ]
   \end{verbatim}
 
   \declare{Array[*object]}{\# -> array}
@@ -52,7 +52,7 @@
      "---Backtrace---",
      "#\{MiniTest::filter_backtrace(e.backtrace).join("\textbackslash n")\}",
      "---------------",
-    ].join "\textbackslash n"\
+    ].join "\textbackslash n"
   \end{verbatim}  
 
   \declare{.pack(format)}{\# -> string}
@@ -73,7 +73,7 @@
   Возвращает элемент с переданным индексом. Если индекс выходит за пределы массива, то возвращается nil.
   \begin{verbatim}
   [ 1, 2, 3 ][2] # -> 3 
-  [ 1, 2, 3 ][4] # -> nil\
+  [ 1, 2, 3 ][4] # -> nil
   \end{verbatim}
 
   \declare{array[ start, size ]}{\# -> array} 
@@ -89,7 +89,7 @@
   [ 1, 2, 3 ][ 2, 2 ] # -> [3] 
   [ 1, 2, 3 ][ 2, 0 ] # -> [ ] 
   [ 1, 2, 3 ][ 2, -1 ] # -> nil 
-  [ 1, 2, 3 ][ 3, 1 ] # -> [ ]\
+  [ 1, 2, 3 ][ 3, 1 ] # -> [ ]
   \end{verbatim}  
 
   \declare{array[range]}{\# -> object} 
@@ -103,7 +103,7 @@
   [ 1, 2, 3 ][ 1...3 ] # -> [ 2, 3 ] 
   [ 1, 2, 3 ][ 1...5 ] # -> [ 2, 3 ] 
   [ 1, 2, 3 ][ 1...0 ] # -> [ ] 
-  [ 1, 2, 3 ][ 5...9 ] # -> nil\
+  [ 1, 2, 3 ][ 5...9 ] # -> nil
   \end{verbatim}
 \end{methodlist}
 
@@ -122,7 +122,7 @@
   [ 1, 2, 3 ][2] = "d" # -> "d" 
   array # -> [ 1, 2, "d" ] 
   [ 1, 2, 3 ][4] = "d"  # -> "d" 
-  array # -> [ 1, 2, 3, "d" ]\
+  array # -> [ 1, 2, 3, "d" ]
   \end{verbatim}
 
   \declare{array[ start, size ] = object}{\# -> object} 
@@ -138,7 +138,7 @@
   array # -> [ 1, 2, "d" ] 
   [ 1, 2, 3 ][ 2, 0 ] = "d" # -> "d" 
   array # -> [ 1, 2, "d", 3 ] 
-  [ 1, 2, 3 ][ 2, -1 ] = "d" # -> error!\
+  [ 1, 2, 3 ][ 2, -1 ] = "d" # -> error!
   \end{verbatim}
 
   \declare{array[range] = object}{\# -> object} 
@@ -152,7 +152,7 @@
   [ 1, 2, 3 ][1...0] = "d"# -> "d" 
   array # -> [ 1, "d", 2, 3 ] 
   [ 1, 2, 3 ][5...9] = "d"# -> "d" 
-  array # -> [ 1, 2, 3, nil, nil, "d" ]\
+  array # -> [ 1, 2, 3, nil, nil, "d" ]
   \end{verbatim}
 \end{methodlist}
 
@@ -272,14 +272,14 @@
   array # -> [ 2, 3 ]
   array = [ 2, 3, 4 ]
   [ 1, 2, 3 ].each { |elem| array.delete elem } # -> [ 1, 2, 3 ]
-  array # -> [4]\
+  array # -> [4]
   \end{verbatim}
 
   \declare{.delete_at(index)}{\# -> object} 
   Изменяет значение объекта, удаляя элемент с переданным индексом. В результате возвращается удаленный объект. Если ни один элемент не был удален, то возвращается nil. 
   \begin{verbatim}
   [ 1, 2, 3 ].delete_at 1 # -> 2 
-  array # -> [ 1, 3 ]\
+  array # -> [ 1, 3 ]
   \end{verbatim}
 
   \declare{.delete_if \{ |object| \}}{\# -> self}
@@ -327,7 +327,7 @@
   Вращает индексный массив на заданное число позиций. Если передано положительное число, то вращение происходит слева направо, если отрицательное, то справа налево.
   \begin{verbatim}
   [ 1, 2, 3 ].rotate  # -> [ 2, 3, 1 ]
-  [ 1, 2, 3 ].rotate -1  # -> [ 3, 1, 2 ]\
+  [ 1, 2, 3 ].rotate -1  # -> [ 3, 1, 2 ]
   \end{verbatim}
 
   \declare{.rotate!( step = 1 )}{\# -> array}
@@ -374,7 +374,7 @@
   Изменяет значение объекта, заменяя элементы массива на результат их итерации.
   \begin{verbatim}
   [ 1, 2, 3 ].collect! { |elem| elem + 1 } # -> [ 2, 3, 4 ]
-  [1,2,3].collect! &:to_s # -> ["1", "2", "3"]\
+  [1,2,3].collect! &:to_s # -> ["1", "2", "3"]
   \end{verbatim}
   
 
@@ -425,7 +425,7 @@
   \begin{verbatim}
   [ 1, 2 ].product [3] # -> [ [1, 3], [2, 3] ]
   [ 1, 2, 3 ].product # -> [ [1], [2], [3] ] 
-  [ 1, 2, 3 ].product [] # -> []\
+  [ 1, 2, 3 ].product [] # -> []
   \end{verbatim}
 
   \declare{.hash}{\# -> integer} 
@@ -467,7 +467,7 @@
   # -> \{ Ruby: "languages", Ivan: "man" \} 
   
   Hash[ Ruby: "languages", Ivan: "man" ] 
-  # -> \{ Ruby: "languages", Ivan: "man" \}\
+  # -> \{ Ruby: "languages", Ivan: "man" \}
   \end{verbatim}
 \end{methodlist} 
 
@@ -522,7 +522,7 @@
   Изменяет значение объекта заменяя или добавляя элемент в ассоциативный массив. 
   \begin{verbatim}
   \{ a: ?a, "b" => 1 \}[:a] = 2 # -> 2 
-  hash # -> \{ :a => 2, "b" => 1 \}\
+  hash # -> \{ :a => 2, "b" => 1 \}
   \end{verbatim}
    
   \declare{.fetch( key, default = nil )}{\# -> object} 
@@ -567,7 +567,7 @@
   Изменяет значение объекта, удаляя указанный элемент. В результате возвращается ассоциируемый объект. Если ключ не найден, то возвращается значение по умолчанию или результат выполнения необязательного блока. 
   \begin{verbatim}
   \{ a: ?a, "b" => 1 \}.delete :a # -> "a"
-  hash # -> \{ "b"=>1 \}\
+  hash # -> \{ "b"=>1 \}
   \end{verbatim}
  
   \declare{.delete_if \{ | key, object | \}}{\# -> self}
@@ -654,7 +654,7 @@
   Возвращает индексный массив, содержащий элементы ассоциативного. Все вложенные индексные массивы будут извлекаться до заданного уровня.
   \begin{verbatim}
   \{ 1 => "one", 2 => [ [2], ["two"] ], 3 => "three" \}.flatten 3 
-  # -> [ 1, "one", 2, 2, "two", 3, "three" ]\
+  # -> [ 1, "one", 2, 2, "two", 3, "three" ]
   \end{verbatim}
 \end{methodlist}
 
@@ -669,7 +669,7 @@
   hash[:a] # -> "a" 
   hash["b"] # -> nil
   hash[:b] # -> nil
-  hash.key 1 # -> "b"\
+  hash.key 1 # -> "b"
   \end{verbatim}
 
   \declare{.size}{\# -> integer} 
@@ -789,7 +789,7 @@
   Enumerator.new( [ 1, 2, ?R ], :delete_at, 2 ) 
   # -> #<Enumerator: [1, 2, "R"]:delete_at(2)> 
   Enumerator.new { |enum| enum << 3 } 
-  # -> #<Enumerator: <Enumerator::Generator:0x87378e8>:each>\
+  # -> #<Enumerator: <Enumerator::Generator:0x87378e8>:each>
   \end{verbatim}
 
   \declare{object.enum_for( method = :each, *arg = nil )}{\# -> enum} 
@@ -805,7 +805,7 @@
   Преобразует перечень в текст. 
   \begin{verbatim}
   Enumerate.new( [ 1, 2, ?R ], :delete_at, 2 ).inspect 
-  # -> "#<Enumerator: [1, 2, \"R\"]:delete_at(2)>"\
+  # -> "#<Enumerator: [1, 2, \"R\"]:delete_at(2)>"
   \end{verbatim}
 \end{methodlist}
 
@@ -894,7 +894,7 @@
   Сортировка элементов в восходящем порядке в соответствии с результатами их итераций.
   \begin{verbatim}
   \{ a: 1, b: 2, c: 3 \}.sort_by \{ |array| -array[1] \}
-  # -> [ [:c, 3], [:b, 2], [:a, 1] ]\
+  # -> [ [:c, 3], [:b, 2], [:a, 1] ]
   \end{verbatim}  
  
   \declare{.group_by \{ |object| \}}{\# -> hash} 
@@ -909,7 +909,7 @@
   Количество групп равно размеру объекта, для которого метод был вызван. Остальные объекты при необходимости дополняются элементами, ссылающимися на nil.
   \begin{verbatim}
   \{ a: 1, b: 2 \}.zip [ 1, 2 ], [1]  
-  # -> [ [ [:a, 1], 1, 1 ], [ [:b, 2], 2, nil ] ]\
+  # -> [ [ [:a, 1], 1, 1 ], [ [:b, 2], 2, nil ] ]
   \end{verbatim}
 
   \declare{.chunk \{ |object| \}}{\# -> enum} 
@@ -1043,7 +1043,7 @@
   Последовательно перебирает элементы, сохраняя результат итерации в индексном массиве.
   \begin{verbatim}
   [ 1, 2, 3 ].collect { |elem| elem < 4 } # -> [ true, true, true ]
-  (1..3).collect(&:next) * ?| # -> "2|3|4"\
+  (1..3).collect(&:next) * ?| # -> "2|3|4"
   \end{verbatim}  
 
   \declare{.reverse_each( *arg = nil ) \{ |object| \}}{\# -> self} 

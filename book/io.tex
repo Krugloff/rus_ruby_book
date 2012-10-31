@@ -466,7 +466,7 @@ $$
   ping pong
   ping pong
   (snipped)
-  ping\
+  ping
   \end{verbatim}
 \end{methodlist}
  
@@ -557,7 +557,7 @@ $$
   \begin{verbatim}
   File.expand_path "test.rb", "~"
   # -> "/home/krugloff/~/test.rb"
-  File.expand_path "/test.rb", ".rb" # -> "/test.rb"\
+  File.expand_path "/test.rb", ".rb" # -> "/test.rb"
   \end{verbatim}  
 
   \declare{::expand_path( filename, basedir = File::pwd )}{\# -> path}
@@ -566,21 +566,21 @@ $$
   File.expand_path "test.rb", "~" # -> "/home/krugloff/test.rb" 
   File.expand_path "/test.rb", ".rb" # -> "/test.rb"
   File.expand_path('../config/environment', "my_app/config.ru") 
-  # -> "/home/mak/my_app/config/environment"\
+  # -> "/home/mak/my_app/config/environment"
   \end{verbatim} 
 
   \declare{::realdirpath( filename, basedir = File::pwd )}{\# -> path}
   Возвращает абсолютный путь. Тильда считается частью имени каталога. Реальное существование каталога обязательно. В другом случае будет вызвана ошибка. При этом существование файла не проверяется.
   \begin{verbatim}
   File.realdirpath "test.rb", "~" # -> error!
-  File.realdirpath "/test.rb", ".rb" # -> "/test.rb"\
+  File.realdirpath "/test.rb", ".rb" # -> "/test.rb"
   \end{verbatim} 
 
   \declare{::realpath( filename, basedir = File::pwd )}{\# -> path}
   Возвращает абсолютный путь. Тильда считается частью имени каталога. Реальное существование файла обязательно.
   \begin{verbatim}
   File.realpath "test.rb", "~" # -> error! 
-  File.realpath "/test.rb", ".rb" # -> error!\
+  File.realpath "/test.rb", ".rb" # -> error!
   \end{verbatim}
 
   \declare{::basename( path, extname = nil )}{\# -> filename}

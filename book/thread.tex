@@ -97,7 +97,7 @@
   tick... 
   Waiting 
   tick... 
-  tick..."\
+  tick..."
   \end{verbatim}
 
   \declare{.value}{\# -> object} 
@@ -224,14 +224,14 @@
   \begin{verbatim}
   Thread.main.group # -> #<ThreadGroup:0x94d9d98>
   ThreadGroup.new.add Thread.main # -> #<ThreadGroup:0x96f0154>
-  Thread.main.group # -> #<ThreadGroup:0x96f0154>\
+  Thread.main.group # -> #<ThreadGroup:0x96f0154>
   \end{verbatim}
 
   \declare{.enclose}{\# -> thgroup}
   Блокирует группу, запрещая добавлять или удалять содержащиеся в ней потоки выполнения.
   \begin{verbatim}
   Thread.main.group.enclose # -> #<ThreadGroup:0x96f0154>
-  ThreadGroup.new.add Thread.main # -> error\
+  ThreadGroup.new.add Thread.main # -> error
   \end{verbatim}
 
   \declare{.enclosed?}{}
@@ -242,7 +242,7 @@
   Возвращает массив потоков выполнения, входящих в группу.
   \begin{verbatim}
   Thread.main # -> #<Thread:0x94da0a4 run>
-  Thread.main.group.list # -> [#<Thread:0x94da0a4 run>]\
+  Thread.main.group.list # -> [#<Thread:0x94da0a4 run>]
   \end{verbatim}
 \end{methodlist}
 

@@ -24,7 +24,7 @@
   Time.local( 1990, 3, 31 ).strftime "Год: %7Y" # -> "Год: 0001990"
   Time.local( 1990, 3, 31 ).strftime "Год: %-7Y" # -> "Год: 1990" 
   Time.local( 1990, 3, 31 ).strftime "Год: %_7Y" # -> "Год:    1990" 
-  Time.local( 1990, 3, 31 ).strftime "Год: %07Y" # -> "Год: 0001990"\
+  Time.local( 1990, 3, 31 ).strftime "Год: %07Y" # -> "Год: 0001990"
   \end{verbatim}    
      
   \key{\%G} - номер года с веком. В качестве первого дня в году обрабатывается понедельник; 
@@ -48,7 +48,7 @@
   \begin{verbatim}
   Time.local(1990, 3, 31).strftime "Месяц: %B" # -> "Месяц: March"
   Time.local(1990, 3, 31).strftime "Месяц: %^B" # -> "Месяц: MARCH"
-  Time.local(1990, 3, 31).strftime "Месяц: %#B" # -> "Месяц: MARCH  "\
+  Time.local(1990, 3, 31).strftime "Месяц: %#B" # -> "Месяц: MARCH  "
   \end{verbatim}    
    
   \key{\%m} - номер месяца (от 01 до 12);  
@@ -136,25 +136,25 @@
   
   \begin{verbatim}
   Time.local( 1990, 3, 31 ).strftime "Дата: %D"
-  # -> "Дата: 03/31/90"\
+  # -> "Дата: 03/31/90"
   \end{verbatim} 
      
   \key{\%F} - форматная строке \verb!"%Y-%m-%d"! (время в формате ISO 8601); 
   \begin{verbatim}
   Time.local( 1990, 3, 31 ).strftime "Дата: %F"
-  # -> "Дата: 1990-03-31"\
+  # -> "Дата: 1990-03-31"
   \end{verbatim}   
    
   \key{\%v} - форматная строке \verb!"%e-%b-%Y"! (время в формате VMS); 
   \begin{verbatim}
   Time.local( 1990, 3, 31 ).strftime "Дата: %v"
-  # -> "Дата: 31-MAR-1990"\
+  # -> "Дата: 31-MAR-1990"
   \end{verbatim}   
    
   \key{\%c} - формат системы;
   \begin{verbatim}
   Time.local( 1990, 3, 31 ).strftime "Система: %c"
-  # -> "Система: Sat Mar 31 00:00:00 1990"\
+  # -> "Система: Sat Mar 31 00:00:00 1990"
   \end{verbatim}
    
   \key{\%r} - форматная строке \verb!"%I:%M:%S %p"!; 
@@ -174,13 +174,13 @@
   \firstkey{\%n} - перевод строки;
   \begin{verbatim}
   Time.local( 1990, 3, 31 ).strftime "%D %n %F %n %c"
-  # -> "03/31/90 \textbackslash n 1990-03-31 \textbackslash n Sat Mar 31 00:00:00 1990"\
+  # -> "03/31/90 \textbackslash n 1990-03-31 \textbackslash n Sat Mar 31 00:00:00 1990"
   \end{verbatim}    
    
   \key{\%t} - отступ;
   \begin{verbatim}
   Time.local( 1990, 3, 31 ).strftime "%D %t %F %t %c"
-  # -> "03/31/90 \textbackslash t 1990-03-31 \textbackslash t Sat Mar 31 00:00:00 1990"\
+  # -> "03/31/90 \textbackslash t 1990-03-31 \textbackslash t Sat Mar 31 00:00:00 1990"
   \end{verbatim}   
 \end{keylist}
 
