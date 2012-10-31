@@ -1,0 +1,65 @@
+% Преамбула.
+\documentclass[a4paper, 12pt, oneside, openany, book]{ncc}
+
+\ChapterPrefixStyle{header,toc}
+\PnumPrototype{999}
+\usepackage[headings]{ncchdr} % Линейка в колонтитуле для стиля headings
+
+\usepackage{krugloff}
+
+% Тело документа.
+\begin{document}
+
+\author{Алекcандр Круглов}
+\title{Ruby}
+\date{\today}
+\bookeditor{Ruby 1.9.3p194}
+\maketitle
+
+{\frontmatter
+\include{author}
+\tableofcontents}
+
+{\mainmatter
+{\part{Структура программы}
+\include{intro}
+\include{standart}
+\include{identificate}
+\include{expression}
+\include{oop}}
+
+{\part{Описание классов}
+\include{numeric}
+\include{text}
+\include{enumerate}
+\include{object}
+\include{subroutine}
+\include{random}
+\include{datetime}
+\include{datatype}}
+
+{\part{Работа программы}
+\include{io}
+\include{args}
+\include{design}
+\include{exception}
+\include{test}
+\include{thread}
+\include{execution}
+\include{security}}}
+
+{\part{Заключение}
+\include{conclusion}}
+
+{\appendix
+\part{Приложения}
+\include{appbin}
+\include{appregexp}
+\include{appformat}
+\include{appequal}
+\include{appencode}
+\include{apppack}
+\include{appdatetime}
+\include{appio}
+\include{appfile}}
+\end{document}

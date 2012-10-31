@@ -1,0 +1,267 @@
+\chapter{Дата и время}
+
+Экземпляры класса Time - это абстрактные объекты, содержащие информацию о времени. Время хранится в секундах, начиная с 01.01.1970 00:00 UTC. Системы отсчета времени GMT (время по Гринвичу) и UTC (универсальное время) трактуются как эквивалентные.
+
+При сравнении разных объектов необходимо помнить, что различные пояса могут иметь смещения по времени от UTC.
+
+Добавленные модули: Comparable
+
+\begin{keylist}{Аргументы:}
+  
+  \firstkey{year} - год; 
+  
+  \key{month} - месяц: либо целое число от 1 до 12, либо текст, содержащий первые три буквы английского названия месяца (аббревиатуру); 
+  
+  \key{day} - день месяца: целое число от 1 до 31; 
+  
+  \key{wday} - день недели: целое число от 0 до 6, начиная с воскресенья; 
+  
+  \key{yday} - день года: целое число от 1 до 366; 
+  
+  \key{isdst} - летнее время: логическая величина; 
+  
+  \key{zone} - временная зона: текст; 
+  
+  \key{hour} - час: целое число от 0 до 23; 
+  
+  \key{min} - минуты: целое число от 0 до 59; 
+  
+  \key{sec} - секунды: целое число или десятичная дробь от 0 до 60; 
+  
+  \key{usec} - микросекунды: целое число или десятичная дробь от 0 до 999;
+\end{keylist}
+
+\begin{methodlist}
+  \declare{::new}{\# -> time}
+  \begin{alltt}
+  (year, month = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0, zone)
+  # -> time\
+  \end{alltt}
+  Создание объекта. При вызове без аргументов возвращается текущее системное время. Последним аргументом передается смещение относительно UTC в виде текста "+00:00" или количества секунд. По умолчанию берется системное смещение часового пояса.
+  \begin{verbatim}
+  Time.new 1990, 3, 31, nil, nil, nil, "+04:00" 
+  # -> 1990-03-31 00:00:00 +0400\
+  \end{verbatim} 
+   
+  \declare{::now}{\# -> time} 
+  Создание объекта для текущего системного времени. 
+  \\\verb!Time.now -> 2011-09-17 10:36:26 +0400!
+ 
+  \declare{::at(time)}{\# -> time} 
+  \verb!( sec, usec = nil ) # -> time!
+
+  Создание объекта. Принимаются секунды и микросекунды, прошедшие с начала точки отсчета UTC. Время вычисляется с учетом смещения часового пояса. 
+  \\\verb!Time.at 1 -> 1970-01-01 03:00:01 +0300!
+
+  \declare{::utc( year, month = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0)}{\# -> time} 
+  \verb!( sec, min, hour, day, month, year, wday, yday, isdst ) # -> time!
+  \alias{gm} 
+  Создание объекта.   
+  \\\verb!Time.utc 1990, 3, 31 -> 1990-03-31 00:00:00 UTC!
+ 
+  \declare{::local( year, month = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0, zone )}{\# -> time} 
+  \verb!(sec, min, hour, day, month, year, wday, yday, isdst, zone) # -> time! 
+
+  \alias{time} 
+  Версия предыдущего метода, вычисляющая время с учетом смещения часового пояса. 
+  \\\verb!Time.local 1990, 3, 31 -> 1990-03-31 00:00:00 +0400!
+\end{methodlist}
+
+\subsection*{Приведение типов} 
+
+\begin{methodlist}
+  \declare{.to_s}{\# -> string} 
+  \alias{inspect} 
+  Преобразование в текст. 
+  \\\verb!Time.local( 1990, 3, 31 ).to_s -> "1990-03-31 00:00:00 +0400"!
+ 
+  \declare{.to_a}{\# -> array} 
+  Возвращает индексный массив вида:
+  \begin{verbatim}
+  [ self.sec, self.min, self.hour,
+    self.day, self.month, self.year,
+    self.wday, self.yday,
+    self.isdst, self.zone ]\
+  \end{verbatim}   
+  \verb!Time.local( 1990, 3, 31 ).to_a # -> [ 0, 0, 0, 31, 3, 1990, 6, 90, true, "MSD" ]!
+ 
+  \declare{.to_i}{\# -> integer} 
+  \alias{tv_sec} 
+  Возвращает количество секунд прошедших начиная с 1970-01-01 00:00:00 UTC. 
+  \\\verb!Time.local( 1990, 3, 31 ).to_i # -> 638827200!
+ 
+  \declare{.to_r}{\# -> rational} 
+  Возвращает количество секунд прошедших начиная с 1970-01-01 00:00:00 UTC в виде рациональной дроби.
+  \\\verb!Time.local( 1990, 3, 31 ).to_r # -> (638827200/1)!
+ 
+  \declare{.to_f}{\# -> float} 
+  Возвращает количество секунд прошедших начиная с 1970-01-01 00:00:00 UTC в виде десятичной дроби.
+  \\\verb!Time.local( 1990, 3, 31 ).to_f # -> 638827200.0!
+\end{methodlist}
+
+\subsection*{Операторы}
+
+\begin{methodlist}
+  \declare{time + sec}{\# -> time2} 
+  Прибавляет переданное количество секунд. 
+  \\\verb!Time.local( 1990, 3, 31 ) + 3600 # -> 1990-03-31 01:00:00 +0400!
+ 
+  \declare{time - time2}{\# -> float}
+  Возвращает разницу в секундах.
+  \\\verb!Time.local( 1990, 3, 31 ) - Time.new( 1990, 3, 31 ) -> 0.0!
+
+  \declare{time - sec}{\# -> time2} 
+  Отнимает переданное количество секунд. 
+  \\\verb!Time.local( 1990, 3, 31 ) - 3600 -> 1990-03-30 23:00:00 +0400 !
+ 
+  \declare{time <=> time2}{} 
+  Сравнение 
+  \\\verb!Time.local( 1990, 3, 31 ) <=> Time.new( 1990, 3, 31 ) -> 0!
+\end{methodlist}
+
+\subsection*{Форматирование}
+
+\begin{methodlist}
+  \declare{.strftime(format)}{\# -> string}
+  Форматирование времени на основе переданной \hyperlink{appdatetime}{\underline{форматной строки}}.
+\end{methodlist}
+
+\subsection*{Изменение времени}
+
+\begin{methodlist}
+  \declare{.getutc}{\# -> time}
+  \alias{getgm} 
+  Возвращает время относительно UTC (без смещения часовых поясов). 
+  \\\verb!Time.local( 1990, 3, 31 ).getutc # -> 1990-03-30 20:00:00 UTC!
+ 
+  \declare{.utc}{\# -> self} 
+  \alias{gmtime} 
+  Версия предыдущего метода, изменяющая значение объекта. 
+
+  \declare{.getlocal( zone = nil )}{\# -> time} 
+  Возвращает время, учитывая смещение часового пояса. Смещение может быть явно передано методу (по умолчанию используется системное смещение). 
+  \\\verb!Time.local(1990, 3, 31).getutc.getlocal # -> 1990-03-31 00:00:00 +0400!
+ 
+  \declare{.localtime( zone = nil )}{\# -> self} 
+  Версия предыдущего метода, изменяющая значение объекта.
+\end{methodlist}
+
+\subsection*{Статистика}
+
+\begin{methodlist}
+  \declare{.asctime}{\# -> string} 
+  \alias{ctime} 
+  Возвращает время. 
+  \\\verb!Time.local( 1990, 3, 31 ).asctime # -> "Sat Mar 31 00:00:00 1990"!
+ 
+  \declare{.utc_offset}{\# -> integer}
+  \alias{gmt_offset, gmtoff} 
+  Интерпретатор возвращает смещение часового пояса относительно UTC в секундах. 
+  \\\verb!Time.local( 1990, 3, 31 ).utc_offset # -> 14400!
+ 
+  \declare{.zone}{\# -> string}
+  Возвращает название временной зоны. 
+  \\\verb!Time.local( 1990, 3, 31 ).zone # -> "MSD"!
+
+  \declare{.year}{\# -> integer} 
+  Возвращает год. 
+  \\\verb!Time.local( 1990, 3, 31 ).year # -> 1990!
+ 
+  \declare{.month}{\# -> integer} 
+  \alias{mon} 
+  Возвращает номер месяца. 
+  \\\verb!Time.local( 1990, 3, 31 ).month # -> 3!
+ 
+  \declare{.yday}{\# -> integer} 
+  Возвращает номер дня в году от 1 до 366. 
+  \\\verb!Time.local( 1990, 3, 31 ).yday # -> 90!
+ 
+  \declare{.day}{\# -> integer} 
+  \alias{mday} 
+  Возвращает число. 
+  \\\verb!Time.local( 1990, 3, 31 ).day # -> 31!
+ 
+  \declare{.wday}{\# -> integer} 
+  Возвращает день недели (от 0 до 6, начиная с воскресенья). 
+  \\\verb!Time.local( 1990, 3, 31 ).wday # -> 6!
+
+  \declare{.hour}{\# -> integer} 
+  Возвращает час дня (число от 0 до 23). 
+  \\\verb!Time.local( 1990, 3, 31 ).hour # -> 0!
+ 
+  \declare{.min}{\# -> integer} 
+  Возвращает количество минут (число от 0 до 59). 
+  \\\verb!Time.local( 1990, 3, 31 ).min # -> 0!
+ 
+  \declare{.sec}{\# -> integer} 
+  Возвращает количество секунд (число от 0 до 60). 
+  \\\verb!Time.local( 1990, 3, 31 ).sec # -> 0!
+ 
+  \declare{.subsec}{\# -> integer} 
+  Возвращает дробную часть секунд. 
+  \\\verb!Time.local( 1990, 3, 31 ).subsec # -> 0!
+ 
+  \declare{.usec}{\# -> integer} 
+  \alias{tv_usec} 
+  Возвращает количество микросекунд. 
+  \\\verb!Time.local( 1990, 3, 31 ).usec # -> 0!
+ 
+  \declare{.time}{}
+  \alias{tv_nsec} 
+  Возвращает количество наносекунд. 
+  \\\verb!Time.local( 1990, 3, 31 ).nsec # -> 0!
+\end{methodlist}
+
+\subsection*{Предикаты}
+
+\begin{methodlist}
+  \declare{.monday?}{} 
+  Проверяет является ли понедельник днем недели. 
+  \\\verb!Time.local( 1990, 3, 31 ).monday? # -> false!
+
+  \declare{.tuesday?}{} 
+  Проверяет является ли вторник днем недели. 
+  \\\verb!Time.local( 1990, 3, 31 ).tuesday? # -> false!
+ 
+  \declare{.wednesday?}{} 
+  Проверяет является ли среда днем недели. 
+  \\\verb!Time.local( 1990, 3, 31 ).wednesday? # -> false!
+ 
+  \declare{.thursday?}{} 
+  Проверяет является ли четверг днем недели. 
+  \\\verb!Time.local( 1990, 3, 31 ).saturday? # -> false!
+ 
+  \declare{.friday?}{} 
+  Проверяет является ли пятница днем недели. 
+  \\\verb!Time.local( 1990, 3, 31 ).friday? # -> false!
+ 
+  \declare{.saturday?}{} 
+  Проверяет является ли суббота днем недели. 
+  \\\verb!Time.local( 1990, 3, 31 ).saturday? # -> true!
+ 
+  \declare{.sunday?}{} 
+  Проверяет является ли воскресенье днем недели. 
+  \\\verb!Time.local( 1990, 3, 31 ).saturday? # -> false!
+
+  \declare{.utc?}{}
+  \alias{gmt?} 
+  Проверяет используется ли время относительно UTC. 
+  \\\verb!Time.local( 1990, 3, 31 ).utc? # -> false!
+ 
+  \declare{.dst?}{}
+  \alias{isdst} 
+  Проверяет используется ли переход на летнее время. 
+  \\\verb!Time.local( 1990, 3, 31 ).dst? # -> true!
+\end{methodlist}
+ 
+\subsection*{Остальное}
+
+\begin{methodlist}
+  \declare{.hash}{\# -> integer} 
+  Возвращает цифровой код объекта. 
+  \\\verb!Time.local( 1990, 3, 31 ).hash # -> -494674000!
+
+  \declare{.round( precise = 0 )}{ -> time}
+  Округляет количество секунд с заданной точностью. Точность определяет размер дробной части. 
+  \\\verb!Time.local( 1990, 3, 31 ).round 2 # -> 1990-03-31 00:00:00 +0400!
+\end{methodlist}

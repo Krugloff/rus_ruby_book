@@ -1,0 +1,581 @@
+\chapter{Объекты}
+
+\section{Интроспекция}
+
+Интроспекция - это возможность определять тип и структуру объектов в процессе выполнения программы.
+
+Интроспекция объектов выполняется с помощью методов экземпляров из классов Object, Class, Module.
+
+В Ruby вся программа может рассматриваться в качестве объекта. Интроспекция программы выполняется с помощью методов классов Class и Module, и методов из модуля Kernel.
+
+\subsection{Проверка выражений}
+Для проверки выражений используется инструкция \method{defined?}, принимающая выражение. 
+\begin{keylist}{Принимаемые аргументы:}
+  
+  \firstkey{Выражение}\# -> "expression";
+  
+  \key{Глобальная переменная}\# -> "global-variable"; 
+  
+  \key{Локальная переменная}\# -> "local-variable"; 
+  
+  \key{Переменная класса}\# -> "class-variable"; 
+  
+  \key{Переменная экземпляра}\# -> "instance-variable"; 
+  
+  \key{Константа}\# -> "constant";
+  
+  \key{true}\# -> "true";
+  
+  \key{false}\# -> "false";
+  
+  \key{nil}\# -> "nil"; 
+  
+  \key{self}\# -> "self";
+  
+  \key{yield}\# -> "yield";
+  
+  \key{super}\# -> "super"; 
+  
+  \key{Выражение присваивания}\# -> "assignment"; 
+  
+  \key{Вызов метода}\# -> "method". 
+\end{keylist}
+
+\subsection{Тип объекта}
+
+\begin{methodlist}
+  \declare{object.class}{\# -> class} 
+  Возвращает класс объекта. 
+  \\\verb!1.class # -> Fixnum!
+ 
+  \declare{object.singleton_class}{\# -> class} 
+  Возвращает собственный класс объекта.
+
+  Для nil, true, false возвращаются NilClass, TrueClass, FalseClass соответственно. 
+
+  Для чисел и объектов-идентификаторов вызывается ошибка. 
+  \\\verb!?1.singleton_class # -> #<Class:#<String:0x921114c>>!
+
+  \declare{object.nil?}{}
+  Проверка отсутствия подходящего объекта. Только для nil возвращается true.
+
+  \declare{module === object}{} 
+  Проверка типа объекта.
+  \begin{verbatim}
+  Fixnum === 1 # -> true 
+  Integer === 1 # -> true 
+  Comparable === 1 # -> true\
+  \end{verbatim}
+  Этот метод обычно используется в альтернативном синтаксисе предложения case, позволяя проверять сразу несколько объектов.
+
+  \declare{object.is_a?(module)}{} 
+  \alias{kind_of?}
+  Проверка типа объекта.
+  \begin{verbatim}
+  1.is_a? Fixnum # -> true 
+  1.is_a? Integer # -> true 
+  1.is_a? Comparable # -> true\
+  \end{verbatim}  
+
+  \declare{object.instance_of?(module)}{}
+  Проверка типа объекта. 
+  \begin{verbatim}
+  1.instance_of? Fixnum # -> true 
+  1.instance_of? Integer # -> false
+  1.instance_of? Comparable # -> false\
+  \end{verbatim}
+
+  \declare{object.respond_to?( method, include_private = false )}{}
+  Проверка реакции объекта на вызов метода с переданным идентификатором. Логическая величина влияет на необходимость поиска среди частных методов.
+
+  Если метод для объекта не определен, то вместо него вызывается метод \method{.respond_to_missing?}. 
+\end{methodlist}
+
+\subsection{Иерархия наследования}
+
+\begin{methodlist}
+  \declare{class.superclass}{\# -> class} 
+  Возвращает базовый класс. Для BasicObject возвращается nil. 
+  \\\verb!Fixnum.superclass # -> Integer!
+
+  \declare{module.name}{\# -> string} 
+  Возвращает название модуля. Для анонимных модулей возвращается nil. 
+  \\\verb!Fixnum.name # -> "Fixnum"!
+ 
+  \declare{module.to_s}{\# -> string} 
+  Для встроенных классов возвращается название модуля. Для анонимных модулей возвращается nil. 
+  \\\verb!Fixnum.to_s # -> "Fixnum"!
+ 
+  \declare{module.ancestors}{\# -> array} 
+  Возвращает основную иерархию наследования, включая добавленные модули.
+  \begin{verbatim}
+  Fixnum.ancestors 
+  # -> [Fixnum, Integer, Numeric, Comparable,
+    Object, Kernel, BasicObject]\
+  \end{verbatim}
+ 
+  \declare{module.included_modules}{\# -> array} 
+  Возвращает список всех добавленных модулей из основной иерархии наследования.
+  \\\verb!Fixnum.included_modules # -> [ Comparable, Kernel ]!  
+
+  \declare{module.include?(module)}{} 
+  Проверяет наличие переданного модуля в иерархии наследования. 
+  \\\verb!Fixnum.include? Comparable # -> true!
+ 
+  \declare{module <=> module}{\# -> -1. 0, 1 или nil}
+  Сравнение положения в иерархии наследования.
+  
+  Интерпретатор возвращает:
+  \begin{description}
+    \item[-1] - если первый модуль добавлен ко второму; 
+    \item[0] - если два модуля ссылаются на один объект; 
+    \item[1] - если второй модуль добавлен к первому; 
+    \item[nil] - если два модуля не относятся к одной иерархии наследования.
+  \end{description} 
+
+  \declare{module < module}{} 
+  Отношение в иерархии наследования. Если два модуля не относятся к одной иерархии наследования, то возвращается nil.
+  \begin{verbatim}
+  Integer < Numeric # -> true
+  Numeric < Comparable # -> true
+  Integer < Comparable # -> true\
+  \end{verbatim}
+
+  \declare{module > module}{} 
+  Отношение в иерархии наследования. Если два модуля не относятся к одной иерархии наследования, то возвращается nil.
+  \begin{verbatim}
+  Integer > Numeric # -> false
+  Numeric > Comparable # -> false
+  Integer > Comparable # -> false\
+  \end{verbatim}
+
+  \declare{module <= module}{} 
+  Отношение в иерархии наследования. Если два модуля не относятся к одной иерархии наследования, то возвращается nil.
+  \begin{verbatim}
+  Integer <= Integer # -> true 
+  Numeric <= Comparable # -> true
+  Integer <= Comparable # -> true\
+  \end{verbatim}
+
+  \declare{module >= module}{} 
+  Отношение иерархии наследования. Если два модуля не относятся к одной иерархии наследования, то возвращается nil.
+  \begin{verbatim}
+  Integer >= Integer # -> true 
+  Numeric => Comparable # -> false
+  Integer => Comparable # -> false\
+  \end{verbatim}
+\end{methodlist}
+
+\subsection{Состояние объекта}
+
+\begin{methodlist}
+  \declare{object.to_s}{\# -> string} 
+  Возвращает класс и цифровой идентификатор объекта.
+
+  \declare{object.inspect}{\# -> string} 
+  Аналогично выполнению \verb!object.to_s!. 
+
+  \declare{object.object_id}{\# -> integer} 
+  Возвращает цифровой идентификатор объекта. 
+  \\\verb!1.object_id # -> 3!
+ 
+  \declare{object.__id__}{\# -> integer} 
+  Возвращает цифровой идентификатор объекта.
+  \\\verb!1.__id__ # -> 3!
+\end{methodlist}
+
+\subsubsection*{Состояние программы}
+
+Так как вся программа по сути является объектом, то интроспекция также позволяет узнать о состоянии выполнения программы.
+
+\begin{methodlist}
+  \declare{global_variables}{\# -> array [PRIVATE: Kernel]} 
+  Возвращает список идентификаторов глобальных переменных. 
+
+  \declare{local_variables}{\# -> array [PRIVATE: Kernel]} 
+  Возвращает список идентификаторов локальных переменных.
+
+  \declare{Module::constants}{\# -> array} 
+  Возвращает список идентификаторов всех констант в теле программы (в теле Object).
+
+  \declare{Module::nesting}{\# -> array} 
+  Возвращает иерархию наследования, в которой вызывается метод (вверх по иерархии пространства имен).
+
+  \begin{keylist}{Переменные и константы:}
+    
+    \firstkey{RUBY_PATCHLEVEL} - версия интерпретатора;
+    
+    \key{RUBY_PLATFORM} - название используемой системы;
+    
+    \key{RUBY_RELEASE_DATE} - дата выпуска интерпретатора;
+    
+    \key{RUBY_VERSION} - версия языка;
+    
+    \key{\$PROGRAM_NAME (\$0)}  - имя выполняемой программы (по умолчанию - имя файла с расширением);
+    
+    \key{__FILE__} - имя выполняемого файла; 
+    
+    \key{__LINE__} - номер выполняемой строки кода;
+    
+    \key{__Encoding__} - кодировка программы.
+  \end{keylist}
+
+  \declare{caller( offset = 1 )}{\# -> array}
+  Возвращает текущую позицию выполнения в виде массива, содержащего: \verb!"файл:строка_кода"! или \verb!"файл: строка_кода in метод"!. Число игнорируемых строк кода может быть ограничено. Если оно больше, чем количество выполненных строк кода, то возвращается nil. 
+
+  \declare{__method__}{\# -> symbol} 
+  \alias{__callee__}
+  Возвращает идентификатор текущего метода. Вне тела метода возвращается nil.
+\end{methodlist}
+
+\subsubsection*{Константы} 
+
+\begin{methodlist}
+  \declare{module.constants( inherited = true )}{\# -> array} 
+  Возвращает список идентификаторов всех констант в теле модуля. Логическая величина влияет на наличие унаследованных констант.
+
+  \declare{module.const_defined?( name, inherited = true )}{}
+  Проверяет существование константы. Логическая величина влияет на наличие унаследованных констант.
+  \\\verb!Comparable.const_defined? :Fixnum # -> true!
+
+  \declare{module.const_get( name, inherited = true )}{\# -> objject}
+  Возвращает значение константы. Если константы не существует, то вызывается ошибка \error{NameError}. Логическая величина влияет на наличие унаследованных констант.
+\end{methodlist}
+
+\subsubsection*{Переменные класса} 
+
+\begin{methodlist}
+  \declare{.class_variables}{\# -> array} 
+  Возвращает список идентификаторов всех существующих переменных класса.
+
+  \declare{.class_variable_defined?(name)}{} 
+  Проверяет существование переменной класса. 
+ 
+  \declare{.class_variable_get(name)}{\# -> object} 
+  Возвращает значение переменной класса. Если переменной не существует, то вызывается ошибка \error{NameError}. 
+\end{methodlist}
+
+\subsubsection*{Переменные экземпляра}
+
+\begin{methodlist}
+  \declare{.instance_variables}{\# -> array} 
+  Возвращает список идентификаторов всех существующих (инициализированных) переменных экземпляра.
+
+  \declare{.instance_variable_defined?(name)}{}
+  Проверяет существование переменной экземпляра. 
+ 
+  \declare{.instance_variable_get(name)}{\# -> object}
+  Возвращает значение переменной экземпляра. Если переменной не существует, то вызывается ошибка \error{NameError}. 
+\end{methodlist} 
+
+\subsection{Поведение объекта}
+
+\begin{methodlist}
+  \declare{object.singleton_methods( inherited = true )}{\# -> array} 
+  Возвращает список идентификаторов всех существующих собственных методов.
+
+  \declare{object.public_methods( inherited = true )}{\# -> array} 
+  Возвращает список идентификаторов всех существующих общих методов класса.
+
+  \declare{object.protected_methods( inherited = true )}{\# -> array} 
+  Возвращает список идентификаторов всех существующих защищенных методов класса.
+
+  \declare{object.private_methods( inherited = true )}{\# -> array} 
+  Возвращает список идентификаторов всех существующих частных методов класса.
+
+  \declare{module.instance_methods( inherited = false )}{\# -> array}
+  Возвращает список идентификаторов всех существующих общих и защищенных методов экземпляров.
+
+  \declare{module.public_instance_methods( inherited = true )}{\# -> array}
+  Возвращает список идентификаторов всех существующих общих методов экземпляров.
+
+  \declare{module.protected_instance_methods( inherited = true)}{\# -> array}
+  Возвращает список идентификаторов всех существующих защищенных методов экземпляров.
+
+  \declare{module.private_instance_methods( inherited = true )}{\# -> array}
+  Возвращает список идентификаторов всех существующих частных методов экземпляров.
+
+  \declare{module.method_defined?(name)}{}
+  Проверяет существование общего или защищенного метода экземпляров.
+  \\\verb!Fixnum.method_defined? :next -> true!
+
+  \declare{module.public_method_defined?(name)}{}
+  Проверяет существование общего метода экземпляров. 
+  \\\verb!Fixnum.public_method_defined? :next -> true!
+
+  \declare{module.protected_method_defined?(name)}{}
+  Проверяет существование защищенного метода экземпляров. 
+  \\\verb!Fixnum.protected_method_defined? :next -> false!
+
+  \declare{module.private_method_defined?(name)}{}
+  Проверяет существование частного метода экземпляров. 
+  \\\verb!Fixnum.private_method_defined? :next -> false!
+
+  \declare{block_given?}{} 
+  \alias{iterator?} 
+  Проверяет передан ли методу блок.
+\end{methodlist} 
+
+\section{Метапрограммирование}
+
+Метапрограммирование - это вид программирования, связанный с созданием программ, в результате работы которых создаются новые программы или программ, изменяющих себя в процессе выполнения.
+
+\subsection{Выполнение произвольного кода}
+
+\begin{methodlist}
+  \declare{binding}{\# -> binding [PRIVATE: Kernel]}
+  Создание экземпляра класса Binding, содержащего информацию о текущем состоянии выполнения программы. Этот объект может быть передан методу \method{.eval}.
+ 
+  \declare{binding.eval( code, file = nil, line = nil )}{\# -> object }
+  Выполнение произвольного кода в отдельной локальной области видимости в контексте, существовавшим при создании экземпляра класса Binding. Дополнительные аргументы используются при вызове ошибки в выполняемом фрагменте кода.
+ 
+  \declare{eval( code, binding = nil, file = nil, line = nil )}{\# -> object [PRIVATE: Kernel]}
+  \verb!{ } # -> object!
+
+  Выполнение произвольного кода в отдельной локальной области видимости в контексте, существовавшим при создании экземпляра класса Binding. Дополнительные аргументы используются при вызове ошибки в выполняемом фрагменте кода.
+ 
+  \declare{module.module_exec( *arg = nil ) \{ |*arg| \}}{\# -> self}
+  \alias{class_exec}
+  Выполнения блока кода в теле модуля. 
+ 
+  \declare{module.module_eval( code, file = nil, line = nil )}{\# -> self}
+  \verb!{ } # -> self!
+
+  \alias{class_eval} 
+  Выполнение произвольного кода или блока в теле модуля. Дополнительные аргументы используются при вызове ошибки в выполняемом фрагменте кода.
+  
+  \declare{object.instance_exec( *arg = nil ) \{ |*arg| \}}{\# -> self}
+  Выполнение блока в области видимости объекта (псевдопеременная self ссылается на объект).
+
+  \declare{object.instance_eval( code, file = nil, line = nil )}{\# -> obj}
+  \verb!{ } # -> self!
+
+  Выполнение произвольного кода или блока в области видимости объекта (псевдопеременная self ссылается на объект). Дополнительные аргументы используются при вызове ошибки в выполняемом фрагменте кода.
+
+  \declare{object.tap \{ |object| \}}{\# -> object} 
+  Выполняется произвольный блок, принимающий объект и возвращающий его после выполнения.
+\end{methodlist}
+
+\subsection{Вызов метода}
+
+\begin{methodlist}
+  \declare{object.send( name, *arg = nil )}{} 
+  \alias{__send__} 
+  Вызов переданного метода. Вызов не существующего метода приводит к возникновению ошибки. 
+ 
+  \declare{object.public_send( name, *arg = nil )}{} 
+  Вызов переданного общего метода. Вызов не существующего метода приводит к возникновению ошибки.
+\end{methodlist}
+
+\subsection{Перехват выполнения}
+
+Перехват выполнения - это технология, позволяющая изменить стандартное поведение интерпретатора при выполнение тех или иных действий.
+
+Перехват выполнения осуществляется с помощью объявления специальных методов, вызываемых автоматически.
+
+\begin{methodlist}
+  \declare{.method_missing( name, *arg = nil )}{} 
+  Выполняется при отсутствии вызываемого метода. 
+
+  \declare{.respond_to_missing?( name, include_private = nil )}{} 
+  Выполняется если при вызове \method{.respond_to?} необходимый метод не будет найден.
+
+  \declare{.const_missing(name)}{} 
+  Выполняется при использовании не существующей константы.
+
+  \declare{.singleton_method_added(name)}{} 
+  Выполняется при объявлении собственного метода объекта. 
+ 
+  \declare{.singleton_method_removed(name)}{} 
+  Выполняется при удалении собственного метода объекта. 
+ 
+  \declare{.singleton_method_undefined(name)}{} 
+  Выполняется при запрете вызова собственного метода объекта.    
+
+  \declare{.method_added(name)}{} 
+  Выполняется при объявлении метода. 
+ 
+  \declare{.method_removed(name)}{} 
+  Выполняется при удалении метода.
+ 
+  \declare{.method_undefined(name)}{} 
+  Выполняется при запрете вызова метода. 
+
+  \declare{.inherited(class)}{} 
+  Выполняется при наследовании классу.
+ 
+  \declare{.append_features(module)}{} 
+  Выполняется при добавлении модуля в одну из иерархий наследования. 
+ 
+  \declare{.extended(module)}{} 
+  Выполняется при добавлении модуля в иерархию наследования собственных классов. 
+ 
+  \declare{.included(module)}{} 
+  Выполняется при добавлении модуля в иерархию наследования обычных классов. 
+\end{methodlist}
+
+\subsection{Изменение состояния}
+
+\begin{methodlist}
+  \declare{module.const_set( name, object )}{\# -> object} 
+  Определение константы.
+
+  \declare{module.remove_const(name)}{\# -> object [PRIVATE]} 
+  Удаление константы и возвращение ее значения. Встроенные классы и модули не могут быть удалены.
+
+  \declare{module.class_variable_set( sym, obj )}{\# -> obj} 
+  Определение переменной класса.
+
+  \declare{module.remove_class_variable(name)}{\# -> object} 
+  Удаление переменной класса и возвращение ее значения. 
+
+  \declare{object.instance_variable_set( name, object )}{\# -> object}
+  Определение переменной экземпляра.   
+
+  \declare{object.remove_instance_variable(name)}{\# -> object [PRIVATE]} 
+  Удаление переменной экземпляра и возвращение ее значения.
+\end{methodlist}
+
+\subsection{Изменение поведения}
+
+\begin{methodlist}
+  \declare{object.define_singleton_method( name, block )}{\# -> block} 
+  Определение собственного метода объекта. 
+
+  \declare{module.define_method( name, block )}{\# -> block [PRIVATE]}
+  Определение метода экземпляров.
+
+  \declare{module.alias_method( new_name, old_name )}{\# -> self [PRIVATE]}
+  Объявление синонима для метода. 
+
+  \declare{module.remove_method(name)}{\# -> self [PRIVATE]} 
+  Удаление метода. Унаследованные методы при этом могут быть вызваны. 
+ 
+  \declare{module.undef_method(name)}{\# -> self [PRIVATE]} 
+  Запрет вызова метода.  
+\end{methodlist}
+
+\section{Остальное}
+
+\subsection{Приведение типов}
+
+Приведение типа - это создание на основе переданного объекта экземпляра другого класса.
+\begin{description}
+  \item{Неявное приведение:}
+
+  Для приведения типов при реализации неявной типизации используются методы \method{.to_i}, \method{.to_s}, \method{.to_a}, \method{.to_f}, \method{.to_c}, \method{.to_r} и т.д. Эти методы возвращают целые числа, текст, индексные массивы, десятичные дроби, комплексные числа и рациональные дроби в том виде, в котором это удобно интерпретатору.
+
+  \item {Явное приведение:}
+
+  Для того, чтобы получить требуемый экземпляр, отформатированный в удобном для человека виде реализуют методы \method{.to_int}, \method{.to_str}, \method{.to_ary}, \method{.to_sym}, \method{.to_regexp}, \method{.to_proc}, \method{.to_hash} и т.д. Эти методы возвращают соответственно целые числа, текст, индексные массивы, объекты-идентификаторы, регулярные выражения, замыкания и ассоциативные массивы.
+\end{description}
+
+Для непосредственного приведения типов вызываются частные методы экземпляров из модуля Kernel. Если приведение типов невозможно, то возвращается nil.
+\begin{methodlist}
+  \declare{Array(object)}{\# -> array}
+  Интерпретатор выполняет выражения:
+  \begin{enumerate}
+    \item \verb!object.to_ary!;
+    \item \verb!object.to_a!.
+  \end{enumerate}
+
+  \declare{Float(object)}{\# -> float}
+  Интерпретатор выполняет выражение \verb!object.to_f!.
+
+  \declare{Integer( object, numeral_system = 10 )}{\# -> integer}
+  Интерпретатор выполняет выражения:
+  \begin{enumerate}
+    \item \verb!object.to_int!;
+    \item \verb!object.to_i!.
+  \end{enumerate}
+
+  Если первым аргументом передается текст, то второй аргумент объявляет систему счисления (от 2 до 36). Для двоичной и шестнадцатеричной систем допускаются приставки 0b (0B) и 0x (0X). В другом случае передаваемый текст должен содержать только десятичные цифры.
+
+  \declare{String(object)}{\# -> string}
+  Интерпретатор выполняет выражение \verb!object.to_s!.
+
+  \declare{format( format, *object )}{\# -> string}
+  \alias{sprintf}
+  Аналогично выполнению \verb!format % [*object]!.
+\end{methodlist}
+
+\subsection{Сравнение объектов}
+
+\subsubsection*{Проверка равенства}
+
+\begin{methodlist}
+  \declare{object == object}{} 
+  \alias{===} 
+  Проверка равенства с приведением типов. 
+  \\\verb!1 == 1.0 -> true!
+
+  \declare{object.eql? object}{} 
+  Проверка равенства без приведения типов. 
+  \\\verb!1.eql? 1.0 -> false!
+ 
+  \declare{object.equal? object}{} 
+  Идентичность двух ссылок.
+  \begin{verbatim}
+  1.equal? 1.0 -> false 
+  "1".equal? "1" -> false 
+  1.equal? 1 -> true 
+  :a.equal? :a -> true\
+  \end{verbatim}
+\end{methodlist}
+
+\subsubsection*{Comparable}
+
+В модуле определены опреаторы для проверки отношения и равенства объектов (<, <=, >, >=, ==), основанные на работе оператора \method{<=>}.
+
+\begin{methodlist}
+  \declare{.between?( first, last )}{}
+  Проверяет входит ли объект между двумя заданными границами.
+\end{methodlist}
+
+\subsection{Копирование объектов}
+
+\subsubsection*{Внутри программы}
+
+Так как все аргументы передаются по ссылке, то изменение их в теле метода может привести к непредсказуемым последствиям. Для решения этой проблемы перед использованием аргумента обычно создают его копию.
+
+\begin{methodlist}
+  \declare{object.clone}{\# -> object2} 
+  Создание копии объекта, сохраняющей все его модификаторы. 
+
+  \declare{object.dup}{\# -> object2} 
+  Создание копии объекта, разрешенной к изменению.
+\end{methodlist}
+
+\subsubsection*{Вне программы}
+
+Маршализация позволяет сохранять произвольные объекты, извлекать их из выполняемой программы и восстанавливать в другой программе (программы должны использовать одну версию интерпретатора).
+
+Для маршализации используется модуль Marshal.
+
+\begin{keylist}{Константы:}
+  
+  \firstkey{Marshal::MAJOR_VERSION} - мажорная версяи интерпретатора;
+  
+  \key{Marshal::MINOR_VERSION} - минорная версия интерпретатора.
+\end{keylist}
+
+\begin{methodlist}
+  \declare{::dup( object, io = nil, deep = -1 )}{\# -> string}
+  Маршализация объекта. Принимается глубина вложенности маршализуемых свойств (по умолчанию не сохраняется). Если передается поток, то результат будет записан в поток.
+
+  Невозможна маршализация:
+  \begin{itemize}
+    \item анонимных модулей или классов;
+    \item объектов, связанных с ОС (файлы, каталоги, потоки и т.д);
+    \item экземпляров MatchData, Data, Method, UnboundMethod, Proc, Thread, ThreadGroup, Continuation;
+    \item объектов, определяющих собственные методы.
+  \end{itemize}
+  \verb!Marshal.dump ?$ # -> "\x04\bI\"\x06$\x06:\x06ET"!
+
+  \declare{::load(marshal_data)}{\# -> object}
+  \verb!(marshal_data) { |result| } # -> object!
+  
+  \alias{restore}
+  Восстановление объекта с помощью текста или потока (используется метод \method{.to_str}). Результат может быть передан в необязательный блок.
+  \\\verb!Marshal.load Marshal.dump(?$) # -> "$"!
+\end{methodlist}

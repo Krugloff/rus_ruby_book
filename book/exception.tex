@@ -1,0 +1,297 @@
+\chapter{Обработка событий}
+
+Событие - это сообщение, вызываемое в различных точках выполнения программы при переходе объектов из одного состояния в другое. События предназначены для управления реакцией программы на изменение состояния.
+  
+Один из подвидов событий - это ошибки или исключения, возникающие в процессе выполнения программы (подразумеваются допустимые ошибки, возникновение которых ожидаемо). Для обработки ошибок в Ruby предусмотрен класс Exception. Обычно название каждого подкласса, содержит полную информацию о причине вызова ошибки.
+
+Каждая ошибка обычно связана с определенным текстовым сообщением, поясняющим причину и место вызова ошибки.
+
+В множество ошибок также входят системные ошибки, имеющие стандартный цифровой код. Модуль Errno динамически связывает полученные от операционной системы цифровые коды с подклассами Exception. При этом для каждой ошибки создается собственный подкласс \error{SystemCallError}, на которые ссылаются константы модуля Errno. Цифровой код ошибки может быть получен с помощью константы Errno (\constant{Errno::\italy{ErrorKlass}::Errno}). 
+
+\section{Иерархия исключений}
+
+\begin{description}
+  \item[Exception] - базовый класс для всех исключений.
+  \begin{description}
+    \item[NoMemoryError] - выделение памяти не может быть выполнено;
+
+    \item[ScriptError]- базовый класс для ошибок интерпретации программы;
+
+    \begin{description}
+      \item[LoadError] - файл не может быть загружен;
+      \item[NotImplemenetedError] - метод не поддерживается системой;
+      \item[SyntaxError] - ошибка в синтаксисе;
+    \end{description}
+
+    \item[SecuirityError] - нарушение требований безопасности;
+
+    \item[SignalException] - получение сигнала от системы;
+    \begin{description}
+      \item[Interrupt] - сигнал прервать процесс выполнения (обычно Ctrl+C);
+    \end{description}
+
+    \item[SystemExit] - завершение выполнения программы системой;
+
+    \item[SystemStackError] - переполнение стека;
+
+    \item[StandardError] - базовый класс для стандартных ошибок выполнения;
+    \begin{description}
+      \item[Math::DomainError] - объекты не принадлежат области определения функции;
+
+      \item[ArgumentError] - ошибка при передаче аргументов;
+
+      \item[EncodingError] - базовый класс для ошибок, связанных с кодировкой;
+      \begin{description}
+        \item[Encoding::CompatibilityError] - исходная кодировка не совместима с требуемой;
+        \item[Encoding::ConverterNotFoundError] - требуемая кодировка не поддерживается;
+        \item[Encoding::InvalidByteSequenceError] - текст содержит некорректные байты;
+        \item[Encoding::UndefinedConversionError] - текст содержит неопределенные символы;
+      \end{description}
+
+      \item[FiberError] - ошибка при работе с управляемыми блоками;
+
+      \item[IOError] - возникновение ошибки при работе с потоками;
+      \begin{description}
+        \item[EOFError] - достигнут конец файла; 
+      \end{description}
+
+      \item[IndexError] - индекс не найден;
+      \begin{description}
+        \item[KeyError] - ключ не найден; 
+        \item[StopIteration] - завершение итерации;
+      \end{description}
+
+      \item[LocalJumpError] - блок не может быть выполнен;
+
+      \item[NameError] - неизвестный идентификатор;
+      \begin{description}
+        \item[NoMethodError] - неизвестный метод;
+      \end{description}
+
+      \item[RangeError] - выход за границы диапазона;
+      \begin{description}
+        \item[FloatDomainError] - попытка преобразования констант для определения специальных чисел (NaN и т.д.);
+      \end{description}
+
+      \item[RegexpError] - ошибка в регулярном выражении;
+
+      \item[RuntimeError] - универсальный класс для ошибок выполнения;
+
+      \item[SystemCallError] - базовый класс для системных ошибок;
+
+      \item[ThreadError] - ошибка при работе с процессами;
+
+      \item[TypeError] - неправильный тип объекта;
+
+      \item[ZeroDivisionError] - деление целого числа на ноль.
+    \end{description}
+  \end{description}
+\end{description}
+ 
+\section{Методы}
+
+\subsection*{Exception}
+
+\begin{methodlist}
+  \declare{::exception( message = nil )}{\# -> exception} 
+  Создание объекта. Для аргумента вызывается метод \method{.to_str}.
+
+  \declare{::new( mesage = nil )}{\# -> exception} 
+  Создание объекта. 
+ 
+  \declare{.exception( message = nil )}{\# -> exception}
+  Новый экземпляр класса. Для аргумента вызывается метод \method{.to_str}.
+
+  \declare{.backtrace}{\# -> array} 
+  Возвращает позицию выполнения программы при вызове ошибки. Каждый элемент имеет вид:
+  \\\verb!"имя_файла:номер_строки: in 'идентификатор_метода'"!
+  или 
+  \\\verb!"имя_файла:номер_строки"!. 
+
+  \declare{.set_backtrace(array)}{\# -> array} 
+  Изменяет позицию выполнения программы, возвращаемую при вызове ошибки. Каждый элемент индексного массива должен иметь вид: 
+  \\\verb!"имя_файла:номер_строки: in 'идентификатор_метода'"!
+  или 
+  \\\verb!"имя_файла:номер_строки"!.
+
+  \declare{.to_s}{\# -> string} 
+  \alias{message}
+  Возвращает сообщение об ошибке (или идентификатор класса). 
+ 
+  \declare{.inspect}{\# -> string}
+  Возвращает идентификатор класса.
+\end{methodlist}
+
+\subsection*{SystemExit}
+
+\begin{methodlist}
+  \declare{::new( status = 0 )}{\# -> exception} 
+  Создание нового объекта. 
+
+  \declare{.status}{\# -> integer} 
+  Возвращает статус выхода. 
+ 
+  \declare{.success?}{} 
+  Проверяет удалось ли завершение программы.
+\end{methodlist}
+
+\subsection*{Encoding::InvalidByteSequenceError}
+
+\begin{methodlist}
+  \declare{.destination_encoding}{\# -> encoding} 
+  Возвращает требуемую кодировку 
+ 
+  \declare{.destination_encoding_name}{\# -> string}
+  Возварщает название требуемой кодировки.
+
+  \declare{.source_encoding}{\# -> encoding} 
+  Возвращает исходную кодировку. При нескольких преобразованиях исходной будет считаться последняя стабильная кодировка. 
+ 
+  \declare{.source_encoding_name}{\# -> string} 
+  Возвращает название исходной кодировки. При нескольких преобразованиях исходной будет считаться последняя стабильная кодировка.
+
+  \declare{.error_bytes}{\# -> string} 
+  Возвращает байт из-за которого была вызвана ошибка. 
+
+  \declare{.incomplete_input?}{} 
+  Проверяет была ли ошибка вызвана преждевременным завершением текста. 
+ 
+  \declare{.readagain_bytes}{\# -> string} 
+  Интерпретатор возвращает байт, обрабатываемый в момент вызова ошибки.
+\end{methodlist}
+
+\subsection*{Encoding::UndefinedConversionError}
+
+\begin{methodlist}
+  \declare{.destination_encoding}{\# -> encoding} 
+  Возвращает требуемую кодировку 
+ 
+  \declare{.destination_encoding_name}{\# -> string}
+  Возварщает название требуемой кодировки.
+
+  \declare{.source_encoding}{\# -> encoding} 
+  Возвращает исходную кодировку. При нескольких преобразованиях исходной будет считаться последняя стабильная кодировка. 
+ 
+  \declare{.source_encoding_name}{\# -> string} 
+  Возвращает название исходной кодировки. При нескольких преобразованиях исходной будет считаться последняя стабильная кодировка.
+
+  \declare{.error_char}{\# -> string} 
+  Возвращает символ из-за которого была вызвана ошибка. 
+\end{methodlist}
+
+\subsection*{StopIteration}
+
+\begin{methodlist}
+  \declare{.result}{\# -> object} 
+  Возвращает результат итерации.
+\end{methodlist}
+
+\subsection*{LocalJumpError}
+
+\begin{methodlist}
+  \declare{.exit_value}{\# -> object} 
+  Возвращает аргумент, передача которого привела к вызову ошибки. 
+ 
+  \declare{.reason}{\# -> symbol}
+  Возвращает идентификатор инструкции, выполнение которой привело к вызову ошибки (:break, :redo, :retry, :next, :return, или :noreason).
+\end{methodlist}
+
+\subsection*{NameError}
+
+\begin{methodlist}
+  \declare{::new( message, name = nil )}{\# -> exception} 
+  Создание нового объекта. 
+
+  \declare{.name}{\# -> name}
+  Возвращает идентификатор, использование которого привело к ошибке.
+\end{methodlist}
+
+\subsection*{NoMethodError}
+
+\begin{methodlist}
+  \declare{::new( message, name, *args = nil )}{\# -> exception}
+  Создание нового объекта. 
+
+  \declare{.args}{\# -> object}
+  Возвращает аргументы, переданные отсутствующему методу.
+\end{methodlist}
+
+\subsection*{SystemCallError}
+
+\begin{methodlist}
+  \declare{::new( message, integer )}{\# -> exception}
+  Создание нового экземпляра класса из модуля Errno (если методу передан известный системе цифровой код ошибки) или класса SystemCallError. 
+
+  \declare{.errno}{\# -> integer} 
+  Возвращает цифровой код ошибки. 
+\end{methodlist}
+
+\section{Вызов и обработка событий}
+
+\subsection{Вызов}
+
+Вызов события выполняется с помощью частного метода экземпляров из модуля Kernel.
+
+\begin{methodlist}
+  \declare{raise( message = nil )}{\# -> exception} 
+  \verb!( exc = RuntimeError, message = nil, pos = caller ) # -> exception!
+
+  \alias{fail}
+  Возвращает значение \verb/$!/ или новый экземпляр класса RuntimeError, если \verb/$!/ ссылается на nil.
+
+  В другом случае методу передаются любой объект, отвечающий на вызов метода \method{.exception}, сообщение о событии и текущая позиция выполнения программы.
+\end{methodlist}
+
+\subsection{Обработка событий}
+
+Обработка событий выполняется с помощью предложения rescue, которое может использоваться только в теле предложений begin, def, class, или module.
+
+События обрабатываются в том порядке, в котором записаны в коде. При вызове события интерпретатор ищет для него обработчик, продвигаясь вверх по областям видимости. Таким образом события обрабатываются в обход процесса выполнения.
+
+Если событие вызвано в результате обработки другого события, то поиск выполняется заново. 
+
+\subsubsection*{Полный синтаксис}
+
+\begin{verbatim}
+  begin 
+    тело_предложения
+  rescue 
+    тело_обработчика 
+  else 
+    code 
+  ensure 
+    code 
+  end\
+\end{verbatim}
+
+\begin{itemize}
+  \item Тело обработчика выполняется после вызова события в теле предложения. Переменная \verb/$!/ при этом ссылается на объект события.
+ 
+  Чтобы присвоить объекту события локальную переменную используют инструкцию \verb!rescue => локальная_переменная!.
+
+  \item По умолчанию обрабатываются подклассы StandardError.
+
+  Для ограничения обрабатываемых событий используют инструкцию \verb!rescue class! или \verb!rescue class => локальная_переменная!. Несколько классов разделяются запятыми.
+
+  \item Инструкция else выполняется если вызова события не произошло. При этом события, вызванные в инструкции не обрабатываются.
+
+  \item Инструкция ensure выполняется после выполнения всего предложения. Результат ее выполнения не влияет на результат выполнения предложения (кроме случаев использования инструкций return, break и т.д)
+\end{itemize}
+
+\subsubsection*{Краткий синтаксис:}
+
+\verb!код rescue тело_обработчика!
+
+Если в коде будет вызвана ошибка, то выполняется тело обработчика. Обрабатываются только подклассы StandardError. 
+
+\subsection{Catch и Throw}
+
+В других языках программирования обработка событий обычно выполняется с помощью пары инструкций catch и throw. В Ruby существуют чатсные методы экземпляров из модуля Kernel, ведущие себя сходным образом.
+
+\begin{methodlist}
+  \declare{catch(name = nil) \{ |name| \}}{\# -> object}
+  Тело блока выполняется до тех пор пока интерпретатор не встретит вызов метода \method{throw} с тем же идентификатором. При вызове без аргументов новый случайный идентификатор передается блоку.
+
+  \declare{throw( name, *object = nil )}{}
+  Завершает выполнение блока, переданного методу \method{catch} с тем же идентификатором (иначе вызывается ошибка). Поиск метода выполняестя вверх по иерархии вложенности. Дополнительные аргументы возвращаются методом \method{catch}.
+\end{methodlist}

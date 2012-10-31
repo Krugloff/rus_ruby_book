@@ -1,0 +1,207 @@
+\hypertarget{appdatetime}{}
+\chapter{Форматирование времени}
+
+Форматная строка состоит из групп символов вида:
+
+\medskip\noindent\verb!%[модификатор][размер][спецсимвол]!. 
+
+Любой текст, не относящийся к спецсимволам или модификаторам переносится в результат без изменений. 
+
+Размер влияет на количество символов в результате. Если размер меньше, чем необходимое количество символов, то он игнорируется интерпретатором.
+
+\begin{keylist}{Модификаторы:}
+  \firstkey{-} - ограничение размера игнорируется;
+  \key{_} - для выделения используются пробелы;
+  \key{0} - для выделения используются нули (по умолчанию);
+  \key{\textasciicircum} - результат в верхнем регистре;
+  \key{\#} - изменяет регистр символов.
+\end{keylist}
+
+\begin{keylist}{Год:}
+  \firstkey{\%Y} - номер года с веком;  
+  \begin{verbatim}
+  Time.local( 1990, 3, 31 ).strftime "Год: %Y" # -> "Год: 1990"
+  Time.local( 1990, 3, 31 ).strftime "Год: %7Y" # -> "Год: 0001990"
+  Time.local( 1990, 3, 31 ).strftime "Год: %-7Y" # -> "Год: 1990" 
+  Time.local( 1990, 3, 31 ).strftime "Год: %_7Y" # -> "Год:    1990" 
+  Time.local( 1990, 3, 31 ).strftime "Год: %07Y" # -> "Год: 0001990"\
+  \end{verbatim}    
+     
+  \key{\%G} - номер года с веком. В качестве первого дня в году обрабатывается понедельник; 
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Год: %G" # -> "Год: 1990"!
+    
+  \key{\%y} - остаток от деления номера года на 100 (от 00 до 99);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Год: %y" # -> "Год: 90"!
+    
+  \key{\%g} - остаток от деления номера года на 100 (от 00 до 99). Первым днем года считается понедельник; 
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Год: %g" # -> "Год: 90"!
+    
+  \key{\%C} - номер года, разделенный на 100 (20 в 2011);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Век: %C" # -> "Век: 19"!
+\end{keylist}
+
+\begin{keylist}{Месяц:}
+  \firstkey{\%b (\%h)} - аббревиатура названия месяца (три первые английские буквы);   
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Месяц: %b" -> "Месяц: Mar"!    
+  
+  \key{\%B} - полное названию месяца;
+  \begin{verbatim}
+  Time.local(1990, 3, 31).strftime "Месяц: %B" # -> "Месяц: March"
+  Time.local(1990, 3, 31).strftime "Месяц: %^B" # -> "Месяц: MARCH"
+  Time.local(1990, 3, 31).strftime "Месяц: %#B" # -> "Месяц: MARCH  "\
+  \end{verbatim}    
+   
+  \key{\%m} - номер месяца (от 01 до 12);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Месяц: %m" -> "Месяц: 03"!
+\end{keylist}
+
+\begin{keylist}{Неделя:}
+  \firstkey{\%U} - номер недели (от 00 до 53). Первое воскресенье года считается началом первой недели;  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Неделя: %U" -> "Неделя: 12"! 
+   
+  \key{\%W} - номер недели (от 00 до 53). Первый понедельник года считается началом первой недели;  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Неделя: %W" -> "Неделя: 13"! 
+   
+  \key{\%V} - номер недели (от 01 до 53) (номер недели в формате ISO 8601);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Неделя: %V" -> "Неделя: 13"! 
+\end{keylist}
+
+\begin{keylist}{День:}
+  \firstkey{\%j} - день года (от 001 до 366);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "День: %j" # -> "День: 090"!
+   
+  \key{\%d} - день месяца;  
+  \\\verb!Time.local( 1990, 3, 3 ).strftime "День: %d" # -> "День: 03"!
+   
+  \key{\%e} - день месяца;  
+  \\\verb!Time.local( 1990, 3, 3 ).strftime "День: %e" # -> "День:  3"!
+   
+  \key{\%a} - аббревиатура дня недели (три первые английские буквы);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "День: %a" # -> "День: Sat"!
+   
+  \key{\%A} - полное название дня недели;  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "День: %A" # -> "День: Saturday"!
+   
+  \key{\%u} - номер дня недели (от 1 до 7, понедельник - 1);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "День: %u" # -> "День: 6"!
+   
+  \key{\%w} - номер дня недели (от 0 до 6, воскресенье - 0);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "День: %w" # -> "День: 6"!
+\end{keylist}
+
+\begin{keylist}{Час:}
+  \firstkey{\%H} - час дня в 24 часовом формате (от 00 до 23);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Час: %H" # -> "Час: 00"!    
+   
+  \key{\%k} - час дня в 24 часовом формате (от 0 до 23);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Час: %k" # -> "Час:  0"!    
+   
+  \key{\%I} - час дня в 12 часовом формате (от 01 до 12);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Час: %I" # -> "Час: 12"!    
+   
+  \key{\%l} - час дня в 12 часовом формате, с приставкой в виде знака пробела (от 0 до 12);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "Час: %l" # -> "Час: 12"!    
+   
+  \key{\%p} - индикатор меридиана ("AM" или "PM"); 
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "%I %p" # -> "12 AM"!    
+   
+  \key{\%P} - индикатор меридиана ("am" или "pm");  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "%I %P" # -> "12 am"!   
+\end{keylist}
+
+\begin{keylist}{Минуты и секунды:}
+  \firstkey{\%M} - количество минут (от 00 до 59);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "мин: %M" # -> "мин: 00"!    
+   
+  \key{\%S} - количество секунд (от 00 до 60);  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "сек: %S" # -> "сек: 00"!    
+   
+  \key{\%N} - дробная часть секунд.
+  \begin{description}
+    \item[\%3N] - миллисекунды;
+    \item[\%6N] - микросекунды;
+    \item[\%9N] - наносекунды (по умолчанию);
+    \item[\%12N] - пикосекунды.
+  \end{description} 
+  
+  \key{\%L} - количество миллисекунд (от 000 до 999); 
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "мс: %L" # -> "мс: 000"!    
+   
+  \key{\%s} - количество секунд, прошедших начиная с 1970-01-01 00:00:00 UTC;  
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "%s" # -> "638827200"!   
+\end{keylist}
+  
+\begin{keylist}{Форматы:}
+  \firstkey{\%D} - форматная строке \verb!"%m/%d/%y"!;
+  
+  \begin{verbatim}
+  Time.local( 1990, 3, 31 ).strftime "Дата: %D"
+  # -> "Дата: 03/31/90"\
+  \end{verbatim} 
+     
+  \key{\%F} - форматная строке \verb!"%Y-%m-%d"! (время в формате ISO 8601); 
+  \begin{verbatim}
+  Time.local( 1990, 3, 31 ).strftime "Дата: %F"
+  # -> "Дата: 1990-03-31"\
+  \end{verbatim}   
+   
+  \key{\%v} - форматная строке \verb!"%e-%b-%Y"! (время в формате VMS); 
+  \begin{verbatim}
+  Time.local( 1990, 3, 31 ).strftime "Дата: %v"
+  # -> "Дата: 31-MAR-1990"\
+  \end{verbatim}   
+   
+  \key{\%c} - формат системы;
+  \begin{verbatim}
+  Time.local( 1990, 3, 31 ).strftime "Система: %c"
+  # -> "Система: Sat Mar 31 00:00:00 1990"\
+  \end{verbatim}
+   
+  \key{\%r} - форматная строке \verb!"%I:%M:%S %p"!; 
+  
+  \verb!Time.local( 1990, 3, 31 ).strftime "%r" # -> "12:00:00 AM"!    
+   
+  \key{\%R} - форматная строке \verb!"%H:%M"!; 
+  
+  \verb!Time.local( 1990, 3, 31 ).strftime "%R" # -> "00:00"!    
+   
+  \key{\%T} - форматная строке \verb!"%H:%M:%S"!; 
+  
+  \verb!Time.local( 1990, 3, 31 ).strftime "%T" # -> "00:00:00"!    
+\end{keylist}
+
+\begin{keylist}{Форматирование:}
+  \firstkey{\%n} - перевод строки;
+  \begin{verbatim}
+  Time.local( 1990, 3, 31 ).strftime "%D %n %F %n %c"
+  # -> "03/31/90 \textbackslash n 1990-03-31 \textbackslash n Sat Mar 31 00:00:00 1990"\
+  \end{verbatim}    
+   
+  \key{\%t} - отступ;
+  \begin{verbatim}
+  Time.local( 1990, 3, 31 ).strftime "%D %t %F %t %c"
+  # -> "03/31/90 \textbackslash t 1990-03-31 \textbackslash t Sat Mar 31 00:00:00 1990"\
+  \end{verbatim}   
+\end{keylist}
+
+\begin{keylist}{Остальное:}
+  \firstkey{\%x} - только дата; 
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "%x" # -> "03/31/90"!    
+   
+  \key{\%X} - только время; 
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "%X" # -> "00:00:00"!    
+   
+  \key{\%z} - смещение часового пояса относительно UTC; 
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "%z" # -> "+0400"!
+  \begin{description}
+    \item[\%:z] - часы и минуты разделяются с помощью двоеточия;
+    \\\verb!Time.local( 1990, 3, 31 ).strftime "%:z" # -> "+04:00"!
+    \item[\%::z] - часы, минуты и секунды разделяются с помощью двоеточия;
+    \\\verb!Time.local( 1990, 3, 31 ).strftime "%::z" # -> "+04:00:00"!
+  \end{description}    
+  
+  \key{\%Z} - название временной зоны; 
+  \\\verb!Time.local( 1990, 3, 31 ).strftime "%Z" # -> "MSD"!    
+   
+  \key{\%\%} - знак процента.
+\end{keylist}
