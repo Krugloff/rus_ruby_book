@@ -448,15 +448,15 @@
   \declare{.dump}{\# -> string}
   Экранирует все спецсимволы. Сам текст при этом экранируется двойными кавычками. Символы, не относящиеся к ASCII кодировке заменяются на их кодовые позиции.
   \begin{verbatim}
-  "3\verb!\n!/2".dump # -> "\verb!\"!3\verb!\n!/2\verb!\"!"
-  "3\verb!\n!/2л".dump # -> "\verb!\"!3\verb!\n!/2\verb!\u{43b}!\verb!\"!"
+  "3\\n/2".dump # -> "\"3\\\\n/2\""
+  "3\\n/2л".dump # -> "\"3\\\\n/2\\u{43b}\""
   \end{verbatim}
 
   \declare{.inspect}{\# -> string}
   Экранирует все спецсимволы. Сам текст при этом экранируется двойными кавычками.
   \begin{verbatim}
-  "3\verb!\n!/2".inspect # -> "\verb!\"!3\verb!\n!/2\verb!\"!"
-  "3\verb!\n!/2л".inspect # -> "\verb!\"!3\verb!\n!/2л\verb!\"!"
+  "3\verb!\n!/2".inspect # -> "\"3\\verb!\\n!/2\""
+  "3\verb!\n!/2л".inspect # -> "\"3\\verb!\\n!/2л\""
   \end{verbatim}
 \end{methodlist}
 
