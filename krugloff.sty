@@ -58,27 +58,33 @@
 \newcommand{\itemtitle}[1]{ \bigskip \noindent #1 \smallskip}
 
 % DRY
-\newcommand{\keylisttitle}[1]{\hline \italy{#1} \bigskip \hrule}
+\newcommand{\keylisttitle}[1]{ \italy{#1} \medskip \hrule \medskip }
 
 % Список определений в рамке.
 \newenvironment{keylist}[1]
-  {\begin{longtable}[l]{| p{0.97\textwidth} |} %
-    \keylisttitle{#1} \endfirsthead 
-    \keylisttitle{#1} \endhead 
+  {\begin{longtable}[l]{| p{0.97\textwidth} |} %     
+    \hline \endfirsthead
+    \hline \keylisttitle{#1} \endhead 
     \hline \endfoot 
-    \hline \endlastfoot 
-    \begin{minipage}[b]{0.97\textwidth} }
+    \hline \endlastfoot
+
+    \begin{minipage}[t]{0.97\textwidth} \keylisttitle{#1} }
   { \end{minipage} 
     \\[7pt] \hline 
     \end{longtable} }
 
 % {minipage} используется, чтобы в теле определения был доступен \\.
 \newcommand{\beginkey}[1]{ \begin{minipage}[b]{0.97\textwidth} \textbf{#1} }
-\newcommand{\key}[1]{\end{minipage} \\[1em] \beginkey{#1}}
+\newcommand{\key}[1]{\end{minipage} \\[0.5em] \beginkey{#1}}
 \newcommand{\firstkey}[1]{\key{#1}}
 
 \RecustomVerbatimEnvironment
   {verbatim}{Verbatim}
+  {frame=leftline, samepage=true}
+
+% Для обратной совместимости.
+\DefineVerbatimEnvironment
+  {code}{Verbatim}
   {frame=leftline, samepage=true}
 
 \newenvironment{operator}
