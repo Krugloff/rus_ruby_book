@@ -1,0 +1,182 @@
+#!/usr/bin/env ruby
+#encoding: utf-8
+
+# TODO: нахождение первого ключа и создание firstkey. Добавить определение firstkey в sty.
+require 'redcarpet'
+
+module Redcarpet; module Render;
+
+  class Krugloff < Redcarpet::Render::Base
+
+    # def postprocess(full_document)
+    #   full_document.gsub
+    # end
+
+    def normal_text(text)
+      constant = /\b(\w+::)+\w+\b/
+      method   = / (\.|::)[a-z0-9]+[!?]?/
+            
+      text = text.gsub( constant, '\constant{\0}' )
+        .gsub( method, ' \method{\0}' )      
+    end
+
+    def paragraph(text)
+      "#{text}\n\n"
+    end
+
+    def header( title, level )
+      case level
+      when 1
+        "\\chapter{#{title}}\n\n"
+      when 2
+        "\\section{#{title}}\n\n"
+      when 3
+        "\\subsection{#{title}}\n\n"
+      when 4
+        "\\subsubsection*{#{title}}\n\n"
+      when 5
+        case title
+        when /^.+:$/
+          "\\begin{keylist}{#{title}}\n"
+        when "end"
+          "\\end{keylist}\n\n"          
+        end        
+      end
+    end
+
+    def emphasis(text)
+      "\\italy{#{escape text}}"
+    end
+
+    def double_emphasis(text)
+      text = text.gsub( /\$\\/, '$\textbackslash ' ) # i don't now how do it.
+        .gsub( /--/, '\twominus ' )
+
+      "\\key{#{escape(text)}}"     
+    end
+
+    def link( link, title, content )
+      url = /^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/
+      mail = /^.+@.+$/
+
+      case link
+      when url, mail        
+        "\\href{#{link}}{\\underline{#{content}}}"
+
+      when nil
+        "\\hypertarget{#{content}}{}"
+
+      when /\{.+?\}/
+        "\\epigraph{#{content}}{link}"       
+
+      else # обработка внутренних ссылок.
+        "\\hyperlink{#{link}}{\\underline{#{content}}}"        
+      end
+
+    end
+
+    # Возможно стоит перенести списки ключей сюда. Для этого придется видоизменить предложение case.
+    def block_code( code, language )
+      case language
+      
+      when :ruby
+        "\\begin{verbatim}" +
+        "#{code}"           +
+        "\\end{verbatim}"
+      
+      when "longtable"
+        "\\begin{longtable}" +
+        "#{code}"            +
+        "\\end{longtable}\n\n"
+
+      when "table"
+        "\\begin{tabular}"  +
+        "#{code}"           +
+        "\\end{tabular}\n\n"
+      
+      # when "note" TODO
+
+      else 
+        "\\begin{verbatim}\n" +
+          "#{code}"           +
+        "\\end{verbatim}\n\n"     
+      end      
+    end
+
+    def codespan(code)
+      return block_code( code, :ruby ) if code.include?("\n")
+
+      # method hack.
+      method = /\A[\.:]+([a-z0-9_]+)[!?]?\z/
+      return "\\method{#{code}}" if code =~ method
+
+      # declare method hack.
+      def_method = /\A(?<name> [\.:+?] \w+? [=!\?]?)
+        (?<args> \(.+\))?
+        (?<block> \s \{.+?\})?
+        (?<ret> \s \#\s->\s \w+)? \z/x
+
+      return code.gsub(def_method) do |match|
+        name  = Regexp.last_match(:name)
+        args  = escape(Regexp.last_match(:args))
+        block = escape(Regexp.last_match(:block))
+        ret   = escape(Regexp.last_match(:ret))
+
+        "\\declare{#{name}#{args}#{block}}{#{ret}}"       
+      end if code =~ def_method
+
+      # verbatim
+      if code.include? '`'
+        "\\verb\'#{code}\'"
+      else
+        "\\verb\`#{code}\`"
+      end            
+    end
+
+    def block_html(html)
+      html      
+    end
+
+    def raw_html(html)
+      html      
+    end
+
+    def list( content, list_type )
+      case list_type
+      when :ordered
+        "\\begin{enumerate}\n"  +
+          "#{content}"          +
+        "\\end{enumerate}\n\n"
+      when :unordered
+        "\\begin{itemize}\n"  +
+          "#{content}"        +
+        "\\end{itemize}\n\n"
+      end
+    end
+
+    def list_item( content, list_type )
+      "\t\\item #{content}" # TODO: maybe escape?
+    end
+
+    private
+
+    def escape(string)
+      return "" if string.nil?
+      string.gsub( '~', '\textasciitilde ' )
+        .gsub( '&' ) { |match| "\\&" } # bug?
+        .gsub( '$', '\$' )
+        .gsub( '^', '\testasciicircum') # TEST: appdatetime
+        .gsub( '#', '\#' ) # TEST: appdatetime
+        .gsub( '%', '\%' ) # TEST: appdatetime
+        .gsub( '{', '\{' )
+        .gsub( '}', '\}' )    
+    end
+
+  end
+end; end
+
+markdown = Redcarpet::Markdown.new(Redcarpet::Render::Krugloff, 
+  no_intra_emphasis: true,
+  fenced_code_blocks: true,
+  lax_spacing: true)
+puts markdown.render(ARGF.read)
