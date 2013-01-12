@@ -24,6 +24,16 @@ module Redcarpet; module Render;
       "#{text}\n\n"
     end
 
+=begin
+# Заголовок главы
+## Заголовок подглавы
+### Заголовок подподглавы
+#### Заголовок пункта
+
+##### Заголовок списка ключей:
+##### Конец списка ключей
+=end
+
     def header( title, level )
       case level
       when 1
@@ -75,7 +85,21 @@ module Redcarpet; module Render;
 
     end
 
-    # Возможно стоит перенести списки ключей сюда. Для этого придется видоизменить предложение case.
+=begin
+
+``` longtable
+Добавить прибавление \\ \hline в конец каждой отдельной строки?
+Улучшить синтаксис.
+```
+=end
+
+    # Возможно стоит перенести списки ключей сюда.
+    # Для этого придется видоизменить предложение case.
+    # Минус в том, что придется изменять текст
+    # (это несложно если составить регулярные выражения).
+    # Плюс в том, что в Github текст будет выглядеть несколько лучше.
+    #
+    # Возможо стоит ввести только одно окружение - latex.
     def block_code( code, language )
       case language
       
@@ -103,6 +127,10 @@ module Redcarpet; module Render;
       end      
     end
 
+=begin
+`method(params) {block} # -> return`
+=end
+
     def codespan(code)
       return block_code( code, :ruby ) if code.include?("\n")
 
@@ -112,17 +140,17 @@ module Redcarpet; module Render;
 
       # declare method hack.
       def_method = /\A(?<name> [\.:+?] \w+? [=!\?]?)
-        (?<args> \(.+\))?
+        (?<params> \(.+\))?
         (?<block> \s \{.+?\})?
         (?<ret> \s \#\s->\s \w+)? \z/x
 
       return code.gsub(def_method) do |match|
-        name  = Regexp.last_match(:name)
-        args  = escape(Regexp.last_match(:args))
-        block = escape(Regexp.last_match(:block))
-        ret   = escape(Regexp.last_match(:ret))
+        name   = Regexp.last_match(:name)
+        params = escape(Regexp.last_match(:params))
+        block  = escape(Regexp.last_match(:block))
+        ret    = escape(Regexp.last_match(:ret))
 
-        "\\declare{#{name}#{args}#{block}}{#{ret}}"       
+        "\\declare{#{name}#{params}#{block}}{#{ret}}"       
       end if code =~ def_method
 
       # verbatim
