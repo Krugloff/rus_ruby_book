@@ -33,7 +33,7 @@
 **-K _ENCODING_** - внешняя и внутренняя кодировки:
 
 [e](EUC-JP);
-+  _s_ - Windows-31J (CP932);
+[s](Windows-31J (CP932));
 +  _u_ - UTF-8;
 +  _n_ - ASCII-8BIT (BINARY).
   
