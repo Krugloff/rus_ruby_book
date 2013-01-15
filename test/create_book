@@ -6,204 +6,209 @@ require 'redcarpet'
 
 module Redcarpet; module Render;
 
-  class Krugloff < Redcarpet::Render::Base
+  class Krugloff < Base
 
-    # def postprocess(full_document)
-    #   full_document.gsub
-    # end
+    # Блочные элементы.
 
     def normal_text(text)
       constant = /\b(\w+::)+\w+\b/
-      method   = / (\.|::)[a-z0-9]+[!?]?/
-            
+      # method   = / (\.|::)[a-z0-9]+[!?]?/
+
       text = text.gsub( constant, '\constant{\0}' )
-        .gsub( method, ' \method{\0}' )      
     end
 
     def paragraph(text)
       "#{text}\n\n"
     end
 
-=begin
-# Заголовок главы
-## Заголовок подглавы
-### Заголовок подподглавы
-#### Заголовок пункта
-
-##### Заголовок списка ключей:
-##### Конец списка ключей
-=end
-
-    def header( title, level )
-      case level
-      when 1
-        "\\chapter{#{title}}\n\n"
-      when 2
-        "\\section{#{title}}\n\n"
-      when 3
-        "\\subsection{#{title}}\n\n"
-      when 4
-        "\\subsubsection*{#{title}}\n\n"
-      when 5
-        case title
-        when /^.+:$/
-          "\\begin{keylist}{#{title}}\n"
-        when "end"
-          "\\end{keylist}\n\n"          
-        end        
+    def list( content, list_type )
+      case list_type
+      when :ordered
+        "\\begin{enumerate}\n"  +
+        "#{content}"            +
+        "\\end{enumerate}\n\n"
+      when :unordered
+        "\\begin{itemize}\n"  +
+        "#{content}"          +
+        "\\end{itemize}\n\n"
       end
     end
 
-    def emphasis(text)
-      "\\italy{#{escape text}}"
+    def list_item( content, list_type )
+      "\\item #{content}" # TODO: maybe escape?
     end
 
-    def double_emphasis(text)
-      text = text.gsub( /\$\\/, '$\textbackslash ' ) # i don't now how do it.
-        .gsub( /--/, '\twominus ' )
+    def block_code( code, language )
+      case language
 
-      "\\key{#{escape(text)}}"     
-    end
-
-    def link( link, title, content )
-      url = /^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/
-      mail = /^.+@.+$/
-
-      case link
-      when url, mail        
-        "\\href{#{link}}{\\underline{#{content}}}"
-
-      when nil
-        "\\hypertarget{#{content}}{}"
-
-      when /\{.+?\}/
-        "\\epigraph{#{content}}{link}"       
-
-      else # обработка внутренних ссылок.
-        "\\hyperlink{#{link}}{\\underline{#{content}}}"        
-      end
-
-    end
-
+      # Warn! No indent here! Indent from code.
+      when 'ruby'
+        "\\begin{verbatim}\n" +
+        "#{code}"           +
+        "\\end{verbatim}\n\n"
 =begin
 
 ``` longtable
 Добавить прибавление \\ \hline в конец каждой отдельной строки?
 Улучшить синтаксис.
 ```
+# Возможо стоит ввести только одно окружение - latex.
 =end
+      # when "longtable"
+      #   "\\begin{longtable}" +
+      #   "#{code}"            +
+      #   "\\end{longtable}\n\n"
 
-    # Возможно стоит перенести списки ключей сюда.
-    # Для этого придется видоизменить предложение case.
-    # Минус в том, что придется изменять текст
-    # (это несложно если составить регулярные выражения).
-    # Плюс в том, что в Github текст будет выглядеть несколько лучше.
-    #
-    # Возможо стоит ввести только одно окружение - latex.
-    def block_code( code, language )
-      case language
-      
-      when :ruby
-        "\\begin{verbatim}" +
-        "#{code}"           +
-        "\\end{verbatim}"
-      
-      when "longtable"
-        "\\begin{longtable}" +
-        "#{code}"            +
-        "\\end{longtable}\n\n"
+      # when "table"
+      #   "\\begin{tabular}"  +
+      #   "#{code}"           +
+      #   "\\end{tabular}\n\n"
 
-      when "table"
-        "\\begin{tabular}"  +
-        "#{code}"           +
-        "\\end{tabular}\n\n"
-      
       # when "note" TODO
 
-      else 
+      else
         "\\begin{verbatim}\n" +
           "#{code}"           +
-        "\\end{verbatim}\n\n"     
-      end      
+        "\\end{verbatim}\n\n"
+      end
     end
 
-=begin
-`method(params) {block} # -> return`
-=end
+    # Конец списка ключей.
+    def hrule
+      "\\end{keylist}\n\n"
+    end
+
+    # Строчные элементы.
+
+    def link( link, title, content )
+      # url = /^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/
+      # mail = /^.+@.+$/
+
+      case link
+
+      # [content]() - создание метки.
+      when nil
+        "\\hypertarget{#{content}}{}"
+
+      # when url, mail
+      #   "\\href{#{link}}{\\underline{#{content}}}"
+
+      # when /\{.+?\}/
+      #   "\\epigraph{#{content}}{link}"
+
+      # else # обработка внутренних ссылок.
+      #   "\\hyperlink{#{link}}{\\underline{#{content}}}"
+      end
+    end
+
+    def header( title, level )
+      case level
+
+      # # Заголовок главы.
+      when 1
+        "\\chapter{#{title}}\n\n"
+
+      # ## Заголовок подглавы.
+      when 2
+        "\\section{#{title}}\n\n"
+
+      # ### Заголовок подподглавы
+      when 3
+        "\\subsection{#{title}}\n\n"
+
+      # #### Заголовок пункта
+      when 4
+        "\\subsubsection*{#{title}}\n\n"
+      # ##### Начало списка ключей:
+      when 5
+        "\\begin{keylist}{#{title}}\n\n"
+      end
+    end
 
     def codespan(code)
-      return block_code( code, :ruby ) if code.include?("\n")
 
-      # method hack.
-      method = /\A[\.:]+([a-z0-9_]+)[!?]?\z/
-      return "\\method{#{code}}" if code =~ method
-
-      # declare method hack.
-      def_method = /\A(?<name> [\.:+?] \w+? [=!\?]?)
-        (?<params> \(.+\))?
-        (?<block> \s \{.+?\})?
-        (?<ret> \s \#\s->\s \w+)? \z/x
-
-      return code.gsub(def_method) do |match|
-        name   = Regexp.last_match(:name)
-        params = escape(Regexp.last_match(:params))
-        block  = escape(Regexp.last_match(:block))
-        ret    = escape(Regexp.last_match(:ret))
-
-        "\\declare{#{name}#{params}#{block}}{#{ret}}"       
-      end if code =~ def_method
-
-      # verbatim
+      # verbatim: `text`
       if code.include? '`'
         "\\verb\'#{code}\'"
       else
         "\\verb\`#{code}\`"
-      end            
+      end
+
+      # return block_code( code, :ruby ) if code.include?("\n")
+
+      # # method hack.
+      # # `method(params) {block} # -> return`
+      # method = /\A[\.:]+([a-z0-9_]+)[!?]?\z/
+      # return "\\method{#{code}}" if code =~ method
+
+      # # declare method hack.
+      # def_method = /\A(?<name> [\.:+?] \w+? [=!\?]?)
+      #   (?<params> \(.+\))?
+      #   (?<block> \s \{.+?\})?
+      #   (?<ret> \s \#\s->\s \w+)? \z/x
+
+      # return code.gsub(def_method) do |match|
+      #   name   = Regexp.last_match(:name)
+      #   params = escape(Regexp.last_match(:params))
+      #   block  = escape(Regexp.last_match(:block))
+      #   ret    = escape(Regexp.last_match(:ret))
+
+      #   "\\declare{#{name}#{params}#{block}}{#{ret}}"
+      # end if code =~ def_method
     end
 
-    def block_html(html)
-      html      
+    # _text_ or *text*
+    def emphasis(text)
+      "\\italy{#{escape text}}"
     end
 
-    def raw_html(html)
-      html      
+    # Если вы хотите закончить строку, а не параграф,
+    # то в конце строки ставится два пробела.
+    def linebreak
+      "\n\\\\*"
     end
 
-    def list( content, list_type )
-      case list_type
-      when :ordered
-        "\\begin{enumerate}\n"  +
-          "#{content}"          +
-        "\\end{enumerate}\n\n"
-      when :unordered
-        "\\begin{itemize}\n"  +
-          "#{content}"        +
-        "\\end{itemize}\n\n"
+    # Предварительная и завершающая обработка.
+
+    # `key` в начале параграфа считается элементом списка ключей.
+    def preprocess(full_document)
+      full_document.gsub(/\n\n(`{1,2})([^`].+?)\1/) do |match|
+
+        # i don't know how do it.
+        match = escape $2.gsub( /\$\\/, '$\textbackslash ' )
+          .gsub( /--/, '\twominus ' )
+
+        "\n\n" + "\\key{#{match}}"
       end
     end
 
-    def list_item( content, list_type )
-      "\t\\item #{content}" # TODO: maybe escape?
-    end
+#     def block_html(html)
+#       html
+#     end
+
+#     def raw_html(html)
+#       html
+#     end
 
     private
 
-    def escape(string)
-      return "" if string.nil?
-      string.gsub( '~', '\textasciitilde ' )
-        .gsub( '&' ) { |match| "\\&" } # bug?
-        .gsub( '$', '\$' )
-        .gsub( '^', '\testasciicircum') # TEST: appdatetime
-        .gsub( '#', '\#' ) # TEST: appdatetime
-        .gsub( '%', '\%' ) # TEST: appdatetime
-        .gsub( '{', '\{' )
-        .gsub( '}', '\}' )    
-    end
+      # Fix: вместо нескольких проходов .gsub, использовать один .map.
+      def escape(string)
+        return "" if string.nil?
+        string.gsub( '~', '\textasciitilde ' )
+          .gsub( '&', '\\\\\\\&' ) # work only 7 backslash for preprocess.
+          .gsub( '$', '\$' )
+          .gsub( '^', '\testasciicircum') # TEST: appdatetime
+          .gsub( '#', '\\\\\#' ) # work only 5 backslash for preprocess.
+          .gsub( '%', '\%' ) # TEST: appdatetime
+          .gsub( '{', '\{' )
+          .gsub( '}', '\}' )
+      end
 
   end
 end; end
 
-markdown = Redcarpet::Markdown.new(Redcarpet::Render::Krugloff, 
+markdown = Redcarpet::Markdown.new(Redcarpet::Render::Krugloff,
   no_intra_emphasis: true,
   fenced_code_blocks: true,
   lax_spacing: true)
