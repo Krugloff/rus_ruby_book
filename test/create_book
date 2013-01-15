@@ -44,7 +44,7 @@ module Redcarpet; module Render;
       # Warn! No indent here! Indent from code.
       when 'ruby'
         "\\begin{verbatim}\n" +
-        "#{code}"           +
+        "#{code}"             +
         "\\end{verbatim}\n\n"
 =begin
 
