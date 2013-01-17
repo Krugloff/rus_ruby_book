@@ -14,7 +14,7 @@ module Redcarpet; module Render;
       constant = /\b(\w+::)+\w+\b/
       # method   = / (\.|::)[a-z0-9]+[!?]?/
 
-      text = text.gsub( constant, '\constant{\0}' )
+      text = escape text.gsub( constant, '\constant{\0}' )
     end
 
     def paragraph(text)
@@ -35,7 +35,7 @@ module Redcarpet; module Render;
     end
 
     def list_item( content, list_type )
-      "\\item #{content}" # TODO: maybe escape?
+      "\\item #{content}"
     end
 
     def block_code( code, language )
@@ -159,7 +159,7 @@ module Redcarpet; module Render;
 
     # _text_ or *text*
     def emphasis(text)
-      "\\italy{#{escape text}}"
+      "\\italy{#{text}}"
     end
 
     # Если вы хотите закончить строку, а не параграф,
@@ -175,7 +175,7 @@ module Redcarpet; module Render;
       full_document.gsub(/\n\n(`{1,2})([^`].*?)\1/) do |match|
 
         # i don't know how do it.
-        match = escape $2.gsub( /\$\\/, '$\textbackslash ' )
+        match = $2.gsub( /\$\\/, '$\textbackslash ' )
           .gsub( /--/, '\twominus ' )
 
         "\n\n" + "\\key{#{match}}"
@@ -195,14 +195,14 @@ module Redcarpet; module Render;
       # Fix: вместо нескольких проходов .gsub, использовать один .map.
       def escape(string)
         return "" if string.nil?
-        string.gsub( '~', '\textasciitilde ' )
-          .gsub( '&', '\\\\\\\&' ) # work only 7 backslash for preprocess.
+        string.gsub( '\n', '\textbackslash n')
+          .gsub( '\r', '\textbackslash r')
+          .gsub( '~', '\textasciitilde ' )
           .gsub( '$', '\$' )
-          .gsub( '^', '\textasciicircum') # TEST: appdatetime
-          .gsub( '#', '\\\\\#' ) # work only 5 backslash for preprocess.
-          .gsub( '%', '\%' ) # TEST: appdatetime
-          .gsub( '{', '\{' )
-          .gsub( '}', '\}' )
+          .gsub( '^', '\textasciicircum')
+          .gsub( '#', '\#' )
+          .gsub( '%', '\%' )
+          .gsub( '&', '\\\\\\&' )
       end
 
   end
