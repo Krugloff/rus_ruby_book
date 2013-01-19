@@ -11,10 +11,7 @@ module Redcarpet; module Render;
     # Блочные элементы.
 
     def normal_text(text)
-      constant = /\b(\w+::)+\w+\b/
-      # method   = / (\.|::)[a-z0-9]+[!?]?/
-
-      text = escape text.gsub( constant, '\constant{\0}' )
+      text = escape(text)
     end
 
     def paragraph(text)
@@ -64,11 +61,14 @@ module Redcarpet; module Render;
       #   "#{code}"           +
       #   "\\end{tabular}\n\n"
 
-      # when "note" TODO
+      when "note"
+        "\\begin{note}" +
+        "#{code}"       +
+        "\\end{note}\n\n"
 
       else
         "\\begin{verbatim}\n" +
-          "#{code}"           +
+        "#{code}"             +
         "\\end{verbatim}\n\n"
       end
     end
@@ -177,6 +177,8 @@ module Redcarpet; module Render;
         # i don't know how do it.
         match = $2.gsub( /\$\\/, '$\textbackslash ' )
           .gsub( /--/, '\twominus ' )
+          .gsub( '{', '\\\\\\{')
+          .gsub( '}', '\\\\\\}')
 
         "\n\n" + "\\key{#{match}}"
       end
@@ -195,7 +197,8 @@ module Redcarpet; module Render;
       # Fix: вместо нескольких проходов .gsub, использовать один .map.
       def escape(string)
         return "" if string.nil?
-        string.gsub( '\n', '\textbackslash n')
+        string
+          .gsub( '\n', '\textbackslash n')
           .gsub( '\r', '\textbackslash r')
           .gsub( '~', '\textasciitilde ' )
           .gsub( '$', '\$' )
