@@ -96,8 +96,8 @@ module Redcarpet; module Render;
       # when /\{.+?\}/
       #   "\\epigraph{#{content}}{link}"
 
-      # else # обработка внутренних ссылок.
-      #   "\\hyperlink{#{link}}{\\underline{#{content}}}"
+      else # обработка внутренних ссылок.
+        "\\hyperlink{#{link}}{\\underline{#{content}}}"
       end
     end
 
