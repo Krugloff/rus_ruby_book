@@ -175,7 +175,8 @@ module Redcarpet; module Render;
       full_document.gsub(/\n\n(`{1,2})([^`].*?)\1/) do |match|
 
         # i don't know how do it.
-        match = $2.gsub( /\$\\/, '$\textbackslash ' )
+        match = $2.gsub( /\\(.)/, '\textbackslash \1' )
+          .gsub( /\$\\/, '$\textbackslash ' )
           .gsub( /--/, '\twominus ' )
           .gsub( '{', '\\\\\\{')
           .gsub( '}', '\\\\\\}')
@@ -202,7 +203,7 @@ module Redcarpet; module Render;
           .gsub( '\r', '\textbackslash r')
           .gsub( '~', '\textasciitilde ' )
           .gsub( '$', '\$' )
-          .gsub( '^', '\textasciicircum')
+          .gsub( '^', '\textasciicircum ')
           .gsub( '#', '\#' )
           .gsub( '%', '\%' )
           .gsub( '&', '\\\\\\&' )
