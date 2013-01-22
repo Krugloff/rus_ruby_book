@@ -2,7 +2,9 @@
 #encoding: utf-8
 
 # TODO: нахождение первого ключа и создание firstkey. Добавить определение firstkey в sty.
+
 require 'redcarpet'
+require 'strscan'
 
 module Redcarpet; module Render;
 
@@ -119,13 +121,38 @@ module Redcarpet; module Render;
       # #### Заголовок пункта
       when 4
         "\\subsubsection*{#{title}}\n\n"
+
       # ##### Начало списка ключей:
       when 5
         "\\begin{keylist}{#{title}}\n\n"
+
+      # ###### Небольшой резервный заголовок
+      when 6
+        "\\itemtitle{\\textbf{#{title}}}\n\n"
       end
     end
 
     def codespan(code)
+
+      # Declare method hack.
+      # `.method(params) {block} # -> return`
+      def_method = /^
+        (?<name>    [\.:]{1,2} \w+? [=!\?]?)
+        (?<params>  \(.+\))?
+        (?<block>   \s \{.+?\})?
+        (?<ret>     \s \#\s->\s \S+)?
+        $/x
+
+      return code.gsub(def_method) do |match|
+        name   = Regexp.last_match(:name)
+        params = escape_method( Regexp.last_match(:params) )
+        block  = escape_method( Regexp.last_match(:block) )
+        ret    = escape_method( Regexp.last_match(:ret) )
+
+        return "\\verb`#{name}`" unless params || block || ret
+
+        "\\declare{#{name}#{params}#{block}}{#{ret}}"
+      end if code =~ def_method
 
       # verbatim: `text`
       if code.include? '`'
@@ -133,33 +160,16 @@ module Redcarpet; module Render;
       else
         "\\verb\`#{code}\`"
       end
-
-      # return block_code( code, :ruby ) if code.include?("\n")
-
-      # # method hack.
-      # # `method(params) {block} # -> return`
-      # method = /\A[\.:]+([a-z0-9_]+)[!?]?\z/
-      # return "\\method{#{code}}" if code =~ method
-
-      # # declare method hack.
-      # def_method = /\A(?<name> [\.:+?] \w+? [=!\?]?)
-      #   (?<params> \(.+\))?
-      #   (?<block> \s \{.+?\})?
-      #   (?<ret> \s \#\s->\s \w+)? \z/x
-
-      # return code.gsub(def_method) do |match|
-      #   name   = Regexp.last_match(:name)
-      #   params = escape(Regexp.last_match(:params))
-      #   block  = escape(Regexp.last_match(:block))
-      #   ret    = escape(Regexp.last_match(:ret))
-
-      #   "\\declare{#{name}#{params}#{block}}{#{ret}}"
-      # end if code =~ def_method
     end
 
     # _text_ or *text*
     def emphasis(text)
       "\\italy{#{text}}"
+    end
+
+    # __text__ or **text**
+    def double_emphasis(text)
+      "\\textbf{#{text}}"
     end
 
     # Если вы хотите закончить строку, а не параграф,
@@ -172,16 +182,19 @@ module Redcarpet; module Render;
 
     # `key` в начале параграфа считается элементом списка ключей.
     def preprocess(full_document)
-      full_document.gsub(/\n\n(`{1,2})([^`].*?)\1/) do |match|
+      keylist = /\#{5,5}
+                 .+?
+                 \*{5,5}/mx
 
-        # i don't know how do it.
-        match = $2.gsub( /\\(.)/, '\textbackslash \1' )
-          .gsub( /\$\\/, '$\textbackslash ' )
-          .gsub( /--/, '\twominus ' )
-          .gsub( '{', '\\\\\\{')
-          .gsub( '}', '\\\\\\}')
+      full_document.gsub(keylist) do |list|
+        list.gsub(/\n\n(`{1,2})([^`].*?)\1/) do |key|
+          match = $2.gsub( /\\(\S)/, '\textbackslash \1' )
+            .gsub( /--/, '\twominus ' )
+            .gsub( '{', '\\\\\\{')
+            .gsub( '}', '\\\\\\}')
 
-        "\n\n" + "\\key{#{match}}"
+          "\n\n" + "\\key{#{match}}"
+        end
       end
     end
 
@@ -196,9 +209,9 @@ module Redcarpet; module Render;
     private
 
       # Fix: вместо нескольких проходов .gsub, использовать один .map.
-      def escape(string)
-        return "" if string.nil?
-        string
+      def escape(text)
+        return unless text
+        text
           .gsub( '\n', '\textbackslash n')
           .gsub( '\r', '\textbackslash r')
           .gsub( '~', '\textasciitilde ' )
@@ -207,6 +220,13 @@ module Redcarpet; module Render;
           .gsub( '#', '\#' )
           .gsub( '%', '\%' )
           .gsub( '&', '\\\\\\&' )
+      end
+
+      def escape_method(text)
+        return unless text
+        escape text .gsub( /\\/, '\textbackslash\-, ' )
+                    .gsub('{','\{')
+                    .gsub('}','\}')
       end
 
   end
