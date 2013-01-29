@@ -75,6 +75,13 @@ module Redcarpet; module Render;
       end
     end
 
+    # > Это сказал Дональд.
+    # > Дональд
+    def block_quote(quote)
+      quote = quote.rstrip.sub( /(.+)\Z/, '}{\1' )
+      "\\epigraph{#{quote}}\n\n"
+    end
+
     # Конец списка ключей.
     def hrule
       "\\end{keylist}\n\n"
@@ -83,24 +90,20 @@ module Redcarpet; module Render;
     # Строчные элементы.
 
     def link( link, title, content )
-      # url = /^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/
-      # mail = /^.+@.+$/
-
       case link
 
       # [content]() - создание метки.
       when nil
         "\\hypertarget{#{content}}{}"
 
-      # when url, mail
-      #   "\\href{#{link}}{\\underline{#{content}}}"
-
-      # when /\{.+?\}/
-      #   "\\epigraph{#{content}}{link}"
-
       else # обработка внутренних ссылок.
         "\\hyperlink{#{link}}{\\underline{#{content}}}"
       end
+    end
+
+    # <link>
+    def autolink(link, link_type)
+      "\\href{#{link}}{\\underline{#{link}}}"
     end
 
     def header( title, level )
