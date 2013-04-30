@@ -1,15 +1,15 @@
 Текст книги в формате PDF доступен по адресу:  
-<http://dl.dropbox.com/u/75172405/Ruby.pdf>
+http://dl.dropbox.com/u/75172405/Ruby.pdf
 
 Как собрать её самостоятельно:
 
 1. Установить Ruby.
 2. Установить необходимые пакеты - `gem install redcarpet`.
 3. Скачать скрипт для преобразования Markdown в LaTeX  
-<https://gist.github.com/Krugloff/5491182>.
+http://gist.github.com/Krugloff/5491182.
 4. Скрипт принимает имя файла в формате `.md` и возвращает текст в формате `.tex`.
 5. Установить XeLaTeX.
-6. Скачать стиль <http://gist.github.com/Krugloff/5491168>.
+6. Скачать стиль - http://gist.github.com/Krugloff/5491168.
 7. Собрать pdf - `xelatex book.tex` (по умолчанию используются шрифты семейства Liberation).
 
 # От автора
