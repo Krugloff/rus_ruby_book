@@ -4,3 +4,6 @@
 *.log
 *.out
 *.fls
+*.tex
+!book.tex
+!io.tex
