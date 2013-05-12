@@ -5,5 +5,6 @@
 *.out
 *.fls
 *.tex
+*.fdb_latexmk
 !book.tex
 !io.tex
