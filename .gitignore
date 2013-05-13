@@ -8,3 +8,4 @@
 *.fdb_latexmk
 !book.tex
 !io.tex
+!number.tex
