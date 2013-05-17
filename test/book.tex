@@ -5,7 +5,7 @@
 \PnumPrototype{999}
 \usepackage[headings]{ncchdr} % Линейка в колонтитуле для стиля headings
 
-\usepackage{krugloff}
+\usepackage{rus_ruby_book}
 
 % Тело документа.
 \begin{document}
@@ -16,50 +16,56 @@
 \bookeditor{Ruby 1.9.3p194}
 \maketitle
 
-{\frontmatter
-\include{author}
-\tableofcontents}
+\frontmatter
+  \include{author}
+  \tableofcontents
 
-% {\mainmatter
-% {\part{Структура программы}
-% \include{intro}
-% \include{standart}
-% \include{identificate}
-% \include{expression}
-% \include{oop}}
+\mainmatter
 
-% {\part{Описание классов}
-% \include{numeric}
-% \include{text}
-% \include{enumerate}
-% \include{object}
-% \include{subroutine}
-% \include{random}
-% \include{datetime}
-% \include{datatype}}
+\part{Основы}
+  \include{intro}
+  \include{standart}
+  \include{identificate}
+  \include{expression}
+  \include{oop}
 
-% {\part{Работа программы}
-% \include{io}
-\include{args}
-% \include{design}
-% \include{exception}
-% \include{test}
-% \include{thread}
-% \include{execution}
-% \include{security}}}
+\part{Описание классов}
+  \include{number}
+  \include{text}
+  \include{enumerate}
+  \include{object}
+  \include{subroutine}
+  \include{random}
+  \include{datetime}
+  \include{datatype}
 
-{\part{Заключение}
-\include{conclusion}}
+\part{Работа программы}
+  \include{execution}
+  \include{io}
+  \include{args}
+  \include{design}
+  \include{exception}
+  \include{test}
+  \include{thread}
+  \include{security}
 
-{\appendix
-\part{Приложения}
-\include{appbin}
-\include{appregexp}
-\include{appformat}
-\include{appequal}
-\include{appencode}
-\include{apppack}
-\include{appdatetime}
-\include{appio}
-\include{appfile}}
+\appendix
+
+\part*{Приложения}
+\addcontentsline{toc}{part}{Приложения}
+  \include{appbin}
+  \include{appregexp}
+  \include{appformat}
+  \include{appassign}
+  \include{appencode}
+  \include{apppack}
+  \include{appdatetime}
+  \include{appio}
+  \include{appfile}
+
+\backmatter
+  \chapter*{Заключение}
+  \addcontentsline{toc}{part}{Заключение}
+  \input{conclusion}
+
 \end{document}
