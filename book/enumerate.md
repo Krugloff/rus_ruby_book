@@ -451,9 +451,9 @@
 
 ### Остальное
 
-`.product( *array = nil ) # -> array2`
+`.product(*array) # -> array2`
 
-`( *array = nil ) { |array2| } # -> array3`
+`(*array) { |part| } # -> array3`
 
 Используется для получения всех возможных фрагментов размером self.size, созданных из элементов всех используемых массивов. Учитывается разный порядок элементов. Каждый элемент может быть использован в подмассиве только один раз.
 
@@ -841,7 +841,7 @@
   # -> #<Enumerator: <Enumerator::Generator:0x87378e8>:each>
 ~~~~~
 
-`.enum_for( method = :each, *arg = nil ) # -> enum`  
+`.enum_for( method = :each, *arg ) # -> enum`  
 \alias{to_enum}
 
 Используется для создания перечня элементов текущего составного объекта.  
@@ -1112,7 +1112,7 @@
   (1..3).collect(&:next) * ?| # -> "2|3|4"
 ~~~~~
 
-`.reverse_each( *arg = nil ) { |object| } # -> self`
+`.reverse_each( *arg ) { |object| } # -> self`
 
 Перебор элементов в обратном порядке.
 

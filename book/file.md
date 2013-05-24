@@ -22,13 +22,13 @@
 
 *****
 
-`::new( name, mode, *perm = nil ) # -> file`
+`::new( name, mode, *perm ) # -> file`
 
 Используется для открытия файла.
 
-`::open( name, mode, *perm = nil ) # -> 0`
+`::open( name, mode, *perm ) # -> 0`
 
-`( name, mode, *perm = nil )  { |file| } # -> object`
+`( name, mode, *perm )  { |file| } # -> object`
 
 Версия предыдущего метода, принимающая блок, после выполнения которого файл закрывается.
 
