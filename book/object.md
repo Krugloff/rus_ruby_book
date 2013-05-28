@@ -77,7 +77,7 @@
 Используется в альтернативном синтаксисе предложения case, позволяя проверять сразу несколько объектов.
 
 `.is_a?(module) # -> [Object]`  
-\alias{kind_of?}
+Синонимы: `kind_of?`
 
 Проверка типа объекта.
 
@@ -362,7 +362,7 @@
 `Fixnum.private_method_defined? :next -> false`
 
 `.block_given? # -> bool [Kernel]`  
-\alias{iterator?}
+Синонимы: `iterator?`
 
 Проверка передан ли методу блок.
 

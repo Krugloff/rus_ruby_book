@@ -174,7 +174,7 @@ Time.local( 1990, 3, 31 ).to_a
 `Time.local( 1990, 3, 31 ).asctime # -> "Sat Mar 31 00:00:00 1990"`
 
 `.utc_offset # -> integer`  
-\alias{gmt_offset, gmtoff}
+Синонимы: `gmt_offset, gmtoff`
 
 Смещение часового пояса относительно UTC в секундах.  
 `Time.local( 1990, 3, 31 ).utc_offset # -> 14400`
@@ -281,7 +281,7 @@ Time.local( 1990, 3, 31 ).to_a
 `Time.local( 1990, 3, 31 ).saturday? # -> false`
 
 `.utc? # -> bool`  
-\alias{gmt?}
+Синонимы: `gmt?`
 
 Проверка используется ли время относительно UTC.  
 `Time.local( 1990, 3, 31 ).utc? # -> false`

@@ -203,7 +203,7 @@ Inode код файла. С помощью этого кода получает�
 
 Определены методы, аналогичные методам из класса File.
 
-+ `FileTest::exist?(path)` (\alias{exists?})  
++ `FileTest::exist?(path)` (Синонимы: `exists?`)  
   `FileTest::size?(path) # -> integer`  
   `FileTest::zero?(path)`  
   `FileTest::file?(path)`  

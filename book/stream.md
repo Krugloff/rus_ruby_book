@@ -309,7 +309,7 @@
 `(size) { |string| } # -> self`
 
 `( sep, size) { |string| } # -> self`  
-\alias{each_line, lines}
+Синонимы: `each_line, lines`
 
 Перебор строк (чтение выполняется с помощью `.readlines`).
 
