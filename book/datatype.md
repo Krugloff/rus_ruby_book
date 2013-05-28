@@ -34,10 +34,10 @@ nil.to_s -> ""      & false.to_s   -> "false" & true.to_s     -> "true"
 
 ### Приведение типов
 
-`.to_sym # -> symbol` \alias{intern}
+`.to_sym # -> symbol` Синонимы: `intern`
 
 `.to_s # -> string`  
-\alias{id2name}
+Синонимы: `id2name`
 
 Используется для получения текстовое значения.  
 `:Ruby.to_s # -> "Ruby"`
@@ -85,14 +85,14 @@ symbol.slice(*object) # -> symbol.to_s.slice(*object)
 `.empty? # -> bool` Выполняемое выражение: `self.to_s.empty?`.
 
 `.length # -> integer`  
-\alias{size}
+Синонимы: `size`
 
 Выполняемое выражение: `self.to_s.length` или `self.to_s.size`.
 
 `.casecmp(object)` Выполняемое выражение: `self.to_s.casecmp(object)`.
 
 `.next # -> symbol`  
-\alias{succ}
+Синонимы: `succ`
 
 Выполняемое выражение: `self.to_s.next.to_sym` или `self.to_s.succ.to_sym`
 
@@ -120,7 +120,7 @@ symbol.slice(*object) # -> symbol.to_s.slice(*object)
 ### Приведение типов
 
 `.to_s # -> string`  
-\alias{inspect}
+Синонимы: `inspect`
 
 Информация об объекте.
 
@@ -130,7 +130,7 @@ symbol.slice(*object) # -> symbol.to_s.slice(*object)
 ~~~~~
 
 `.to_a # -> array`  
-\alias{values}
+Синонимы: `values`
 
 Массив значений свойств.  
 `Struct::Kлюч.new( [1, 2, 3] ).to_a # -> [ [1, 2, 3] ]`
@@ -188,7 +188,7 @@ symbol.slice(*object) # -> symbol.to_s.slice(*object)
 `Struct::Kлюч.new( [1, 2, 3] ).hash # -> -764829164`
 
 `.size # -> integer`  
-\alias{length}
+Синонимы: `length`
 
 Количество свойств.  
 `Struct::Kлюч.new( [1, 2, 3] ).size # -> 1`

@@ -95,7 +95,7 @@
 Используется для изменения данных о распространении исключения.
 
 `.to_s # -> string`  
-\alias{message}
+Синонимы: `message`
 
 Сообщение об ошибке (или идентификатор класса).
 
@@ -209,7 +209,7 @@
 `.raise( message = nil ) # -> exception`
 
 `( exc = RuntimeError, message = nil, pos = caller ) # -> exception`  
-\alias{fail}
+Синонимы: `fail`
 
 Используется для повторного вызова последнего исключения или создания нового ( RuntimeError), если `$!` ссылается на nil.
 

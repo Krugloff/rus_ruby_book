@@ -61,7 +61,7 @@
 `::utc( year, month = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0)`
 
 `( sec, min, hour, day, month, year, wday, yday, isdst ) # -> time`  
-\alias{gm}
+Синонимы: `gm`
 
 Используется для создания объекта.  
 `Time.utc 1990, 3, 31 -> 1990-03-31 00:00:00 UTC`
@@ -69,7 +69,7 @@
 `::local( year, month = 1, day = 1, hour = 0, min = 0, sec = 0, usec = 0, zone )`
 
 `(sec, min, hour, day, month, year, wday, yday, isdst, zone) # -> time`  
-\alias{time}
+Синонимы: `time`
 
 Используется для создания объекта, с учетом смещения часового пояса.  
 `Time.local 1990, 3, 31 -> 1990-03-31 00:00:00 +0400`
@@ -77,7 +77,7 @@
 ## Приведение типов
 
 `.to_s # -> string`  
-\alias{inspect}
+Синонимы: `inspect`
 
 Преобразование в текст.  
 `Time.local( 1990, 3, 31 ).to_s -> "1990-03-31 00:00:00 +0400"`
@@ -99,7 +99,7 @@ Time.local( 1990, 3, 31 ).to_a
 ~~~~~
 
 `.to_i # -> integer`  
-\alias{tv_sec}
+Синонимы: `tv_sec`
 
 Количество секунд прошедших начиная с 1970-01-01 00:00:00 UTC.  
 `Time.local( 1990, 3, 31 ).to_i # -> 638827200`
@@ -146,13 +146,13 @@ Time.local( 1990, 3, 31 ).to_a
 ## Системы остчета
 
 `.getutc # -> time`  
-\alias{getgm}
+Синонимы: `getgm`
 
 Время относительно UTC (без смещения часовых поясов).  
 `Time.local( 1990, 3, 31 ).getutc # -> 1990-03-30 20:00:00 UTC`
 
 `.utc # -> self`  
-\alias{gmtime}
+Синонимы: `gmtime`
 
 Версия предыдущего метода, изменяющая значение объекта.
 
@@ -168,7 +168,7 @@ Time.local( 1990, 3, 31 ).to_a
 ## Статистика
 
 `.asctime # -> string`  
-\alias{ctime}
+Синонимы: `ctime`
 
 Время в виде текста.  
 `Time.local( 1990, 3, 31 ).asctime # -> "Sat Mar 31 00:00:00 1990"`
@@ -190,7 +190,7 @@ Time.local( 1990, 3, 31 ).to_a
 `Time.local( 1990, 3, 31 ).year # -> 1990`
 
 `.month # -> integer`  
-\alias{mon}
+Синонимы: `mon`
 
 Номер месяца.  
 `verb!Time.local( 1990, 3, 31 ).month # -> 3`
@@ -201,7 +201,7 @@ Time.local( 1990, 3, 31 ).to_a
 `Time.local( 1990, 3, 31 ).yday # -> 90`
 
 `.day # -> integer`  
-\alias{mday}
+Синонимы: `mday`
 
 Номер дня в месяце.  
 `Time.local( 1990, 3, 31 ).day # -> 31`
@@ -232,13 +232,13 @@ Time.local( 1990, 3, 31 ).to_a
 `Time.local( 1990, 3, 31 ).subsec # -> 0`
 
 `.usec # -> integer`  
-\alias{tv_usec}
+Синонимы: `tv_usec`
 
 Количество микросекунд.  
 `Time.local( 1990, 3, 31 ).usec # -> 0`
 
 `.nsec # -> integer`  
-\alias{tv_nsec}
+Синонимы: `tv_nsec`
 
 Количество наносекунд.  
 `Time.local( 1990, 3, 31 ).nsec # -> 0`
@@ -287,7 +287,7 @@ Time.local( 1990, 3, 31 ).to_a
 `Time.local( 1990, 3, 31 ).utc? # -> false`
 
 `.dst? # -> bool`  
-\alias{isdst}
+Синонимы: `isdst`
 
 Проверка используется ли переход на летнее время.  
 `Time.local( 1990, 3, 31 ).dst? # -> true`
