@@ -612,6 +612,75 @@
   Выполнение выражения `extend self` в теле класса приведет к тому, что для каждого метода экземпляров автоматически объявляется соответствующий метод класса.
 ~~~~~
 
+###### Ruby 2.0
+
+Во второй версии добавлена возмжность переопределять методы, определенные в классе.
+
+`.prepend(*a_module) # -> self [PRIVATE: Module]`
+
+Используется для агрегации модулей. Агрегируемые модули добавляются в начало очереди вызова методов. Также переопределяются константы и переменные. Методы, определенные в самом классе будут доступны с помощью super.
+
+~~~~~ ruby
+  module Foo
+    def baz; 'foo-baz'; end
+  end
+
+  class Bat
+    include Foo
+    def baz; 'bat-baz'; end
+  end
+  Bar.new.baz # -> 'bat-baz'
+
+  class Bar
+    prepend Foo
+    def baz; 'bar-baz'; end
+  end
+  Bar.new.baz # -> 'foo-baz'
+~~~~~
+
+Этот механизм облегчает полиморфизм методов. Если раньше приходилось расширять методы посредством создания промежуточных синонимов, то теперь можно просто агрегировать различные модули.
+
+~~~~~ ruby
+  # Ruby 1.9:
+  class Range
+    # Взято из active_support/core_ext/range/include_range.rb
+    # Изменение Range#include? для поиска диапазонов.
+    def include_with_range?(value)
+      if value.is_a?(::Range)
+        # 1...10 включает 1..9, но не 1..10.
+        operator = exclude_end? && !value.exclude_end? ? :< : :<=
+        include_without_range?(value.first) && value.last.send(operator, last)
+      else
+        include_without_range?(value)
+      end
+    end
+
+    alias_method_chain :include?, :range
+  end
+
+  Range.ancestors # -> [ Range, Enumerable, Object... ]
+
+  # Ruby 2.0
+  module IncludeRangeExt
+    # Изменение Range#include? для поиска диапазонов.
+    def include?(value)
+      if value.is_a?(::Range)
+        # 1...10 включает 1..9, но не 1..10.
+        operator = exclude_end? && !value.exclude_end? ? :< : :<=
+        super(value.first) && value.last.send(operator, last)
+      else
+        super
+      end
+    end
+  end
+
+  class Range
+    prepend IncludeRangeExt
+  end
+
+  Range.ancestors # -> [ IncludeRangeExt, Range, Enumerable, Object... ]
+~~~~~
+
 #### Иерархия наследования
 
 Иерархия классов объекта - это последовательность классов, в которых выполняется поиск вызываемого метода (в Ruby иерархия классов содержит также и модули).
