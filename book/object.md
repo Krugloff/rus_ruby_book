@@ -260,6 +260,72 @@
 
 Число игнорируемых строк кода может быть ограничено. Если оно больше, чем количество выполненных строк кода, то возвращается nil.
 
+###### Ruby 2.0
+
+Во второй версии добавлен новый способ получить доступ к состоянию стека выполнения программы.
+
+`.caller_locations( start = 1, length = nil ) # -> array or nil [Ruby 2.0]`
+
+`(range) # -> array or nil`
+
+Фрагмент состояния стека выполнения программы в виде массива, содержащего экземпляры `Thread::Backtrace::Location`.
+
+Если начальная позиции фрагмента превышает текущий размер стека, то возвращается nil.
+
+~~~~~ ruby
+  # Ruby 1.9:
+  def whoze_there_using_caller
+    caller[0][/`([^']*)'/, 1]
+  end
+
+  # Ruby 2.0:
+  def whoze_there_using_locations
+    caller_locations(1, 1)[0].label
+  end
+~~~~~
+
+**Thread::Backtrace::Location**
+
+`.absolute_path # -> string`
+
+Полный путь к файлу.  
+`caller_locations.last.absolute_path # -> "/usr/bin/irb"`
+
+`.base_label # -> string`
+
+Основная метка. Обычно соответсвует простой метке без дополнительного оформления.
+
+`caller_locations.last.base_label # -> "main"`
+
+`.inspect # -> string`  
+Информация об объекте.
+
+`caller_locations.last.inspect # -> "\"/usr/bin/irb:12:in '<main>'\""`
+
+`.label # -> string`
+
+Метка. Обычно содержит название метода, класса, модуля и т.д. с дополнительным оформлением.  
+`caller_locations.last.label # -> "<main>"`
+
+`.lineno # -> integer`
+
+Номер строки кода.  
+`caller_locations.last.lineno # -> 12`
+
+`.path # -> string`
+
+Имя файла.
+
+~~~~~ ruby
+  loc = caller_locations(0..1).first
+  loc.path # -> 'caller_locations.rb'
+~~~~
+
+`.to_s # -> string`
+
+Иноформация об объекте в стиле метода `Kernel.caller`.  
+`caller_locations.last.to_s # -> "/usr/bin/irb:12:in '<main>'"`
+
 #### Константы
 
 `.constants( inherited = true ) # -> array [Module]`
