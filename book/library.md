@@ -37,3 +37,215 @@
 Используется для получения названия библиотеки, загружаемой при получении соответствующей константы. Если такая библиотека не объявлена, то возвращается nil.
 
 Для загрузки библиотек относительно констант вызываемых в теле определенного модуля существуют версии методов `module.autoload` и `module.autoload?`.
+
+## Усовершенствование (Ruby 2.0)
+
+Во второй версии Ruby добавлен механизм, позволяющий усовершенствовать используемые библиотеки кода, с помощью создания улучшений. Улучшение - это синтаксическая конструкция, позволяющая переопределять существующее поведение. В отличии от обычного переопределения, улучшения воздействуют только на текущую область видимости.
+
+Улучшения считаются экспериментальной функцией и их применение для рабочих приложений не рекомендуется.
+
+Достоинства:
+
++ Применение изменений только в текущей области видимости.
+
+Недостатки:
+
++ Усложнение понимания кода.
++ Усложнение поиска методов.
++ Результат выполнения кода зависит от его местоположения.
+
+`.refine(a_class) { } # -> a_module [private Module]`
+
+Используется для улучшения переданного класса. Метод создает анонимный модуль, содержащий сделанные улучшения (self ссылается на этот модуль). Модули могут содержать сразу несколько улучшений. Метод существует только в теле модуля (но не класса).
+
+Улучшения действуют только на сущности, создаваемые после применения улучшения.
+
+~~~~~ ruby
+  # Старый способ
+  class String
+    def bang
+      "#{self}"
+    end
+  end
+  "Hello".bang # -> "Hello"
+~~~~~
+
+~~~~~ ruby
+  # Новый способ
+  module StringBang
+    "Hello".bang # -> NoMethodError!
+
+    refine String do
+      def bang; "#{self}"; end
+    end
+
+    "Hello".bang # -> "Hello!"
+  end
+  "Hello".bang # -> NoMethodError!
+~~~~~
+
+`.using(module) # -> main [MAIN]`
+
+Используется для применения улучшений из модуля. Улучшения могут применяться только для файла и в методах `Kernel.eval`, `Kernel.instance_eval` или `Kernel.module_eval`.
+
++ Улучшения действуют только на сущности, создаваемые после применения. При наличии улучшений класса, поиск методов начинается с улучшений (улучшения добавляются в начало очереди вызова и могут быть доступны с помощью super).
+
+~~~~~ ruby
+  module Foo
+    def foo
+      puts "C#foo in Foo"
+    end
+  end
+
+  class C
+    prepend Foo
+    def foo
+      puts "C#foo"
+    end
+  end
+
+  class D < C
+    def foo
+      super
+    end
+  end
+~~~~~
+
+~~~~~ ruby
+  module M
+    refine C do
+      def foo
+        puts "C#foo in M"
+      end
+    end
+  end
+
+  C.new.foo # -> 'C#foo in Foo'
+
+  using M
+  C.new.foo # -> "C#foo in M"
+  D.new.foo # -> "C#foo in Foo"
+
+  class E < C
+    def foo
+      super
+    end
+  end
+
+  E.new.foo # -> "C#foo in M"
+~~~~~
+
++ Улучшения не действуют на методы, определяемые вне улучшаемого контекста. Улучшения могут не действовать во время вызова `Kernel.send`, `Kernel.method`, и `Kernel.respond_to?`.
+
+~~~~~ ruby
+  C = Class.new
+
+  module M
+    refine C do
+      def foo
+        puts "C#foo in M"
+      end
+    end
+  end
+
+  def call_foo(x)
+    x.foo
+  end
+
+  using M
+
+  x = C.new
+  x.foo       # -> "C#foo in M"
+  x.send :foo # -> NoMethodError!
+  x.respond_to? :foo # -> false
+  call_foo(x) # -> NoMethodError!
+~~~~~
+
++ Улучшения действую на методы, которые были определены после применения улучшений, даже если метод вызывается вне действия улучшения.
+
+~~~~~ ruby
+  # c.rb:
+
+  class C
+  end
+~~~~~
+
+~~~~~ ruby
+  # m.rb:
+
+  require "c"
+
+  module M
+    refine C do
+      def foo
+        puts "C#foo in M"
+      end
+    end
+  end
+~~~~~
+
+~~~~~ ruby
+  # m_user.rb:
+
+  require "m"
+
+  using M
+
+  class MUser
+    def call_foo(x)
+      x.foo
+    end
+  end
+~~~~~
+
+~~~~~ ruby
+  # main.rb:
+
+  require "m_user"
+
+  x = C.new
+  m_user = MUser.new
+  m_user.call_foo(x)  # -> C#foo in M
+  x.foo               # -> NoMethodError!
+~~~~~
+
++ Улучшения не действуют, если метод `.using` не вызывался.
+
+~~~~~ ruby
+  # В файле:
+
+  # not activated here
+  using M
+  # activated here
+  class Foo
+    # activated here
+    def foo
+      # activated here
+    end
+    # activated here
+  end
+  # activated here
+~~~~~
+
+~~~~~ ruby
+  # В eval:
+
+  # not activated here
+  eval <<EOF
+    # not activated here
+    using M
+    # activated here
+  EOF
+  # not activated here
+~~~~~
+
+~~~~~ ruby
+  # В условии:
+  # not activated here
+  if false
+    using M
+  end
+  # not activated here
+~~~~~
+
++ Переопределение метода, добавленного улучшением, может привести к аварийному останову программы.
