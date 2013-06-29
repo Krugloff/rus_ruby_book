@@ -22,6 +22,7 @@ nil.to_s -> ""      & false.to_s   -> "false" & true.to_s     -> "true"
   nil.to_c # -> (0+0i)
   nil.to_f # -> 0.0
   nil.to_i # -> 0
+  nil.to_h # -> {} [Ruby 2.0]
 ~~~~~
 
 ## Symbol
@@ -134,6 +135,16 @@ symbol.slice(*object) # -> symbol.to_s.slice(*object)
 
 Массив значений свойств.  
 `Struct::Kлюч.new( [1, 2, 3] ).to_a # -> [ [1, 2, 3] ]`
+
+`.to_h # -> hash [Ruby 2.0]`
+
+Массив свойств и их значений.
+
+~~~~~ ruby
+  Customer = Struct.new :name, :address, :zip
+  joe = Customer.new "Joe Smith", "123 Maple, Anytown NC", 12345
+  joe.to_h[:address] # -> "123 Maple, Anytown NC"
+~~~~~
 
 ### Элементы
 

@@ -613,7 +613,7 @@
 
 В Ruby существуют соглашения, определяющие процесс приведения типов.
 
-+ Для получения объекта в виде, удобном для интерпретатора, используются методы `object.to_i`, `object.to_s`, `object.to_a`, `object.to_f`, `object.to_c`, `object.to_r` и т.д.
++ Для получения объекта в виде, удобном для интерпретатора, используются методы `object.to_i`, `object.to_s`, `object.to_a`, `object.to_f`, `object.to_c`, `object.to_r`, `object.to_h` (ruby 2.0) и т.д.
 
 + Для плучения объекта в виде, удобном для восприятия человеком, используются методы `object.to_int`, `object.to_str`, `object.to_ary`, `object.to_sym`, `object.to_regexp`, `object.to_proc`, `object.to_hash` и т.д.
 
@@ -638,6 +638,19 @@
 `.String(object) # -> string`
 
 1. `object.to_s`
+
+`.Hash(object) # -> hash [Ruby 2.0]`
+
+1. `object.to_hash`
+
+Для nil или пустого массива возвращается `{}`.
+
+~~~~~ ruby
+  Hash([])          # -> {}
+  Hash(nil)         # -> {}
+  Hash(key: :value) # -> {:key => :value}
+  Hash( [1, 2, 3] ) # -> TypeError!
+~~~~~
 
 `.format( format, *object ) # -> string`  
 Синонимы: `sprintf`
