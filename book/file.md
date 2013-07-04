@@ -162,7 +162,80 @@
 `::fnmatch?( pattern, path, constants = nil )`  
 Синонимы: `fnmatch`
 
-Проверка соответствия пути переданному образцу.
+Проверка соответствия пути переданному [образцу](appfile).
+
+~~~~~ ruby
+  File.fnmatch? 'cat', 'cat'      # -> true
+  File.fnmatch? 'cat', 'category' # -> false
+~~~~~
+
+~~~~~ ruby
+  File.fnmatch? 'c{at,ub}s', 'cats'                    # -> false
+  File.fnmatch? 'c{at,ub}s', 'cats', File::FNM_EXTGLOB # -> true [Ruby 2.0]
+~~~~~
+
+~~~~~ ruby
+  File.fnmatch? 'c?t',     'cat'     # -> true
+  File.fnmatch? 'c??t',    'cat'     # -> false
+  File.fnmatch? 'c*',      'cats'    # -> true
+  File.fnmatch? 'c*t',     'c/a/b/t' # -> true
+  File.fnmatch? 'ca[a-z]', 'cat'     # -> true
+  File.fnmatch? 'ca[^t]',  'cat'     # -> false
+~~~~~
+
+~~~~~ ruby
+  File.fnmatch? 'cat', 'CAT'                     # -> false
+  File.fnmatch? 'cat', 'CAT', File::FNM_CASEFOLD # -> true
+~~~~~
+
+~~~~~ ruby
+  File.fnmatch? '?',   '/', File::FNM_PATHNAME   # -> false
+  File.fnmatch? '*',   '/', File::FNM_PATHNAME   # -> false
+  File.fnmatch? '[/]', '/', File::FNM_PATHNAME   # -> false
+~~~~~
+
+~~~~~ ruby
+  File.fnmatch? '\?',   '?'                       # -> true
+  File.fnmatch? '\a',   'a'                       # -> true
+  File.fnmatch? '\a',   '\a', File::FNM_NOESCAPE  # -> true
+  File.fnmatch? '[\?]', '?'                       # -> true
+~~~~~
+
+~~~~~ ruby
+  File.fnmatch? '*',   '.profile'                      # -> false
+  File.fnmatch? '*',   '.profile', File::FNM_DOTMATCH  # -> true
+  File.fnmatch? '.*',  '.profile'                      # -> true
+~~~~~
+
+~~~~~ ruby
+  rbfiles = '**/*.rb'
+  File.fnmatch? rbfiles, 'main.rb'                    # -> false
+  File.fnmatch? rbfiles, './main.rb'                  # -> false
+  File.fnmatch? rbfiles, 'lib/song.rb'                # -> true
+  File.fnmatch? '**.rb', 'main.rb'                    # -> true
+  File.fnmatch? '**.rb', './main.rb'                  # -> false
+  File.fnmatch? '**.rb', 'lib/song.rb'                # -> true
+  File.fnmatch? '*',     'dave/.profile'              # -> true
+~~~~~
+
+~~~~~ ruby
+  pattern = '*/*'
+  File.fnmatch? pattern, 'dave/.profile', File::FNM_PATHNAME  # -> false
+  File.fnmatch? pattern, 'dave/.profile',
+    File::FNM_PATHNAME | File::FNM_DOTMATCH
+  # -> true
+~~~~~
+
+~~~~~ ruby
+  pattern = '**/foo'
+  File.fnmatch? pattern, 'a/b/c/foo', File::FNM_PATHNAME     # -> true
+  File.fnmatch? pattern, '/a/b/c/foo', File::FNM_PATHNAME    # -> true
+  File.fnmatch? pattern, 'c:/a/b/c/foo', File::FNM_PATHNAME  # -> true
+  File.fnmatch? pattern, 'a/.b/c/foo', File::FNM_PATHNAME    # -> false
+  File.fnmatch? pattern, 'a/.b/c/foo',
+    File::FNM_PATHNAME | File::FNM_DOTMATCH
+  # -> true
+~~~~~
 
 `::identical?( path, path2 )`
 
