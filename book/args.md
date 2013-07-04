@@ -107,6 +107,7 @@ ARGF ($<) - это поток, открываемый для всех файло
 + `ARGF::each` (Синонимы: `each_line, lines`)
 + `ARGF::bytes` (Синонимы: `each_byte`)
 + `ARGF::chars` (Синонимы: `each_char`)
++ `ARGF::codepoints` (Синонимы: `each_codepoint`, Ruby 2.0)
 
 #### Запись данных
 
