@@ -324,7 +324,7 @@
 Перебор символов.
 
 `.codepoints { |point| } # -> self`  
-Синонимы: `codepoints`
+Синонимы: `each_codepoint`
 
 Перебор кодовых позиций.
 
