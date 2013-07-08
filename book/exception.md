@@ -101,6 +101,12 @@
 
 `.inspect # -> string` Идентификатор класса.
 
+### LoadError [ruby 2.0]
+
+`.path # -> string`
+
+Метод используется для получения пути, по которому не был найден файл.
+
 ### SystemExit
 
 `::new( status = 0 ) # -> exception`
