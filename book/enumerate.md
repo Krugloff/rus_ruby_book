@@ -952,6 +952,27 @@
 Используется для создания перечня элементов текущего составного объекта.  
 `[1, 2, ?R].enum_for # -> #<Enumerator: [1, 2, "R"]:each>`
 
+Во второй версии Ruby метод принимает блок, с помощью которого может быть вычислен размер перечня (без вычисления его элементов).
+
+~~~~~ ruby
+  module Enumerable
+    # Дублирование элементов составного объекта.
+    def repeat(n)
+      raise ArgumentError, "#{n} is negative!" if n < 0
+      if block_given?
+        each { |*val| n.times { yield *val } }
+      else
+        # __method__ == :repeat
+        enum_for( __method__, n ) { size * n if size }
+      end
+    end
+  end
+
+  enum = (1..14).repeat(3)
+  enum.first(4) # -> [1, 1, 1, 2]
+  enum.size # -> 42
+~~~~~
+
 ### Приведение типов
 
 `.inspect # -> string`
