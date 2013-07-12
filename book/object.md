@@ -491,9 +491,39 @@
 
 Используется для определения собственного метода объекта.
 
-`.define_method( name, block ) # -> block [PRIVATE: Object]`
+`.define_method(name) { } # -> proc [PRIVATE: Object]`
 
-Используется для определения метода экземпляров. Можно создавать методы, идентификаторы которых содержат произвольные символы.
+`(name, method) # -> new_method [Ruby 2.0]`
+
+Метод используется для определения метода экземпляров. Можно создавать методы, идентификаторы которых содержат произвольные символы.
+
+Переданный блок станет телом нового метода (блок выполянется с помощью `.instance_eval`).
+
+Во второй версии Ruby метод может принимать подпрограммы.
+
+~~~~~ ruby
+  class A
+    def fred; puts "In Fred"; end
+
+    def create_method(name, &block)
+      self.class.send(:define_method, name, &block)
+    end
+
+    define_method(:wilma) { puts "Charge it!" }
+  end
+
+  class B < A
+    define_method(:barney, instance_method(:fred))
+  end
+
+  a = B.new
+
+  a.barney # -> 'In Fred'
+  a.wilma # -> 'Charge it!'
+
+  a.create_method(:betty) { p self }
+  a.betty # -> '#<B:0x97dccfc>'
+~~~~~
 
 `.alias_method( new_name, old_name ) # -> self [PRIVATE: Module]`
 
