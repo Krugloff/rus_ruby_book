@@ -157,6 +157,8 @@ Cинонимы: `kill`
   tick..."
 ~~~~~
 
+Во второй версии Ruby вызов метода для текущего или основного потоков считается исключением `ThreadError`.
+
 `.value # -> object`
 
 Используется для выполнения потока (с помощью метода `.join`).
@@ -193,7 +195,23 @@ Cинонимы: `kill`
 
 `.[name]=(object) # -> object`
 
-Используется для изменения локальных переменных внутри потока.  
+Метод используется для инициализации локальных переменных. Переменные будут существовать только для сопрограмм, выполняемых в теле потока (тело потока считается базовой сопрограммой).
+
+~~~~~ ruby
+  [
+    Thread.new { Thread.current["name"] = "A" },
+    Thread.new { Thread.current[:name]  = "B" },
+    Thread.new { Thread.current["name"] = "C" }
+  ].each do |th|
+    th.join
+    puts "#{th.inspect}: #{th[:name]}"
+  end
+
+  # ->
+  #<Thread:0x00000002a54220 dead>: A
+  #<Thread:0x00000002a541a8 dead>: B
+  #<Thread:0x00000002a54130 dead>: C
+~~~~~
 `Thread.main[:local] = 4 # -> 4`
 
 `.[name] # -> object`
@@ -210,6 +228,56 @@ Cинонимы: `kill`
 
 Проверка существования локальной переменной.  
 `Thread.main.key? :global # -> false`
+
+###### Ruby 2.0
+
+Во второй верси Ruby добавлены методы для работы с локальными переменными потока. В отличии от метода `.[]`, локальные переменные потока будут сохранять свое значение в теле сопрограмм.
+
+`.thread_variable_set(name, value)`
+
+Метод используется для инициализации локальных переменных потока.
+
+`.thread_variable_get(name) # -> value`
+
+Метод используется для получения значения локальной переменной потока.
+
+~~~~~ ruby
+  Thread.new {
+    Thread.current.thread_variable_set("foo", "bar")
+    Thread.current["foo"] = "bar"
+
+    Fiber.new {
+      Fiber.yield [
+        Thread.current.thread_variable_get("foo"), # -> 'bar'
+        Thread.current["foo"],                     # -> nil
+      ]
+    }.resume
+  }.join.value # -> ['bar', nil]
+~~~~~
+
+`.thread_variable?(name) # -> bool`
+
+Метод используется для проверки существования локальной переменной потока.
+
+~~~~~ ruby
+  me = Thread.current
+  me.thread_variable_set(:oliver, "a")
+  me.thread_variable?(:oliver)    # -> true
+  me.thread_variable?(:stanley)   # -> false
+~~~~~
+
+`.thread_variables # -> array`
+
+Метод используется для получения массива имен локальных переменных потока.
+
+~~~~~ ruby
+  thr = Thread.new do
+    Thread.current.thread_variable_set(:cat, 'meow')
+    Thread.current.thread_variable_set("dog", 'woof')
+  end
+  thr.join               # -> #<Thread:0x401b3f10 dead>
+  thr.thread_variables   # -> [:dog, :cat]
+~~~~~
 
 #### Обработка ошибок
 
@@ -236,6 +304,68 @@ Cинонимы: `kill`
 `( exc, message = nil, pos = nil )`
 
 Возбуждение исключения для потока. Метод не может быть вызван для текущего потока выполнения.
+
+#### Асинхронная обработка событий [ruby 2.0]
+
+Во второй версии Ruby добавлены методы для асинхронной обработки прерываний. В качестве прерываний рассматриваются исключения (`.raise`), закрытие потока (`.kill`) и закрытие основного потока (все производные потоки также будут закрыты).
+
+`::handle_interrupt(options) { } # -> result`
+
+Метод используется для изменения поведения при обработке прерываний (для текущего потока). Переданный массив содержит классы исключений, ассоциируемые с идентификаторами выполняемых действий. Каждое исключение будет обработано с помощью переданного блока.
+
+##### Действия:
+
+`:immediate` - немедленный вызов прерывания;
+
+`:on_blocking` - вызов прерывания только после блокировки потока;
+
+`:never` - отмена вызова прерывания.
+
+*****
+
+~~~~~ ruby
+  # Для основного потока вызов `RuntimeError` будет игнорироваться.
+  th = Thread.new do
+    Thread.handle_interrupt(RuntimeError => :never) {
+      begin
+        # You can write resource allocation code safely.
+        Thread.handle_interrupt(RuntimeError => :immediate) {
+          # ...
+        }
+      ensure
+        # You can write resource deallocation code safely.
+      end
+    }
+  end
+  Thread.pass
+  # ...
+  th.raise "stop"
+~~~~~
+
+`::pending_interrupt?(exception_klass = nil) # -> boolean`
+
+Метод используется для проверки существования обработчиков прерываний в очереди (поток ожидает начало обработки прерывания). Когда методу передается аргумент, то проверяются только обработчики определенного класса прерываний.
+
+~~~~~ ruby
+  th = Thread.new{
+    Thread.handle_interrupt(RuntimeError => :on_blocking){
+      loop do
+        # ...
+        # Безопасная точка для вызова прерывания (поток заблокирован).
+        if Thread.pending_interrupt?
+          Thread.handle_interrupt(Object => :immediate){}
+        end
+        # ...
+      end
+    }
+  }
+  # ...
+  th.raise # остановка потока.
+~~~~~
+
+`.pending_interrupt?(exception_klass = nil) # -> boolean`
+
+Версия предыдущего метода для экземпляров класса.
 
 #### Остальное
 
@@ -279,6 +409,10 @@ Cинонимы: `kill`
 `.backtrace # -> array`
 
 Состояние выполнения потока.
+
+`.backtrace_locations(*args) # -> array || nil [Ruby 2.0]`
+
+Метод используется для получения [стека выполнения](backtrace) текущего потока. Эквивалентно `.caller_locations`.
 
 ### Группировка потоков (ThreadGroup)
 

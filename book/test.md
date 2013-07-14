@@ -107,6 +107,7 @@
 
 *****
 
+[](backtrace)
 ### Стек выполнения
 
 `.caller( offset = 1 ) # -> array [Kernel]`
