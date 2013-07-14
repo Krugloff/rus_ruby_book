@@ -257,7 +257,7 @@
 
 Проверка реакции объекта на вызов метода с переданным идентификатором. Логическая величина влияет на необходимость поиска среди частных методов.
 
-**Во второй версии Ruby** поиск изначально выполняется только для общих методов.
+**Во второй версии Ruby** поиск изначально выполняется только для общих методов. Также во второй версии Ruby метод относится к частным.
 
 Если метод для объекта не определен, то вместо него вызывается метод `.respond_to_missing?`.
 
@@ -392,6 +392,8 @@
 `.respond_to_missing?( name, include_private = nil )`
 
 Выполняется если при вызове `object.respond_to?` необходимый метод не будет найден.
+
+**Во второй версии Ruby** метод относится к частным.
 
 `.const_missing(name)`
 
@@ -665,6 +667,61 @@
 `.dup # -> object [Object]`
 
 Используется для создания копии объекта, разрешенной к изменению.
+
+`.initialize_clone(object) # -> object`
+
+Метод вызывается при попытке создать копию объекта, сохраняющую все его модификаторы (для клона). В качестве аргумента передается клонируемый объект.
+
+**Во второй версии Ruby** метод относится к частным.
+
+`.initialize_dup(object) # -> object`
+
+Метод вызывается при попытке создать копию объекта, разрешенной к изменению (для клона). В качестве аргумента передается клонируемый объект.
+
+**Во второй версии Ruby** метод относится к частным.
+
+`.initialize_copy(object) # -> object`
+
+Метод вызывается при попытке создать копию объекта (для клона). В качестве аргумента передается клонируемый объект.
+
+###### Псевдокод
+
+Приведенный ниже псевдокод отражает выполняемые действия при клонировании объекта.
+
+~~~~~ ruby
+  class Object
+    def clone
+      clone = self.class.allocate
+
+      clone.copy_instance_variables(self)
+      clone.copy_singleton_class(self)
+
+      clone.initialize_clone(self)
+      clone.freeze if frozen?
+
+      clone
+    end
+
+    def dup
+      dup = self.class.allocate
+      dup.copy_instance_variables(self)
+      dup.initialize_dup(self)
+      dup
+    end
+
+    def initialize_clone(other)
+      initialize_copy(other)
+    end
+
+    def initialize_dup(other)
+      initialize_copy(other)
+    end
+
+    def initialize_copy(other)
+      # ...
+    end
+  end
+~~~~~
 
 #### Маршализация (Marshal)
 
