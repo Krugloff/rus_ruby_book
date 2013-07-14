@@ -529,6 +529,17 @@
   a.betty # -> '#<B:0x97dccfc>'
 ~~~~~
 
+Также во второй версии Ruby метод может вызываться для определения глобальных методов.
+
+~~~~~ ruby
+  # 1.9.3
+  define_method(:hello) { "Hello World!" } # -> NoMethodError!
+
+  # 2.0.0
+  define_method(:hello) { "Hello World!" }
+  hello # -> "Hello World!"
+~~~~~
+
 `.alias_method( new_name, old_name ) # -> self [PRIVATE: Module]`
 
 Используется для создания синонимов.
