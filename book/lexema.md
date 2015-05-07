@@ -21,3 +21,5 @@
 \input{datatypes.tex}
 
 \input{identificate.tex}
+
+\input{operators.tex}
