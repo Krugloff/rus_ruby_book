@@ -1,6 +1,6 @@
 ## Идентификаторы
 
-~~~~~ruby
+~~~~~ ruby
 data
 total_sum
 create_file
@@ -25,7 +25,7 @@ mazdaRX7
 
 ### Переменные и константы
 
-~~~~~ruby
+~~~~~ ruby
 local_var
 $global_var
 _unused_var
