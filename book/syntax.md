@@ -41,4 +41,4 @@
 
 + Уровни вложенности выражений принято оформлять двумя пробелами.
 
-\input{expression.tex}
+\input{expressions.tex}
