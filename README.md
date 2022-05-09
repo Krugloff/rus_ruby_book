@@ -17,6 +17,3 @@
 
 + Исходники: <http://github.com/Krugloff>
 + Автор: <mr.krugloff@gmail.com>
-+ Благодарности:
-  + Qiwi: 89212870782
-  + WebMoney: R349517838989
