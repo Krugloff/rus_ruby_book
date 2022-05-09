@@ -1,7 +1,7 @@
 # От автора
 
 Текст книги в формате PDF доступен по адресу:  
-<http://dl.dropbox.com/u/75172405/Ruby.pdf>
+<https://www.dropbox.com/s/wnj6lgg3izhvpns/Ruby.pdf>
 
 ###### Сборка:
 
